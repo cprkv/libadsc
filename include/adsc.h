@@ -3,44 +3,34 @@
 
 // ---------------- macro
 
-#define ads_alloc_struct(var, type) struct type* var = malloc(sizeof(struct type))
-
 // ---------------- typedefs
-
-typedef void (*remover_t)(void*);
 
 // ---------------- structs
 
-struct adslist_data_t // list data
+struct ads_list_data_t // list data
 {
     void* value;
-    struct adslist_data_t* next;
+    struct ads_list_data_t* next;
 };
 
-struct adslist_t // list header
+struct ads_list_t // list header
 {
-    struct adslist_data_t* data;
+    struct ads_list_data_t* head;
     size_t size;
-    remover_t remover;
 };
 
 // ---------------- extern data
 
-extern remover_t ads_default_remover;
-
 // ---------------- methods
 
 // linked list without deallocator
-struct adslist_t* adslist_create();
-
-// linked list with custom deallocator
-struct adslist_t* adslist_create_custom(remover_t remover);
+struct ads_list_t* ads_list_create();
 
 // adds some data to linked list
-void adslist_push(struct adslist_t* list, void* value);
+void ads_list_push(struct ads_list_t* list, void* value);
 
-// returns first element in list (NULL if empty)
-void* adslist_top(struct adslist_t* list);
+// returns head element if list (NULL if empty)
+void* ads_list_top(struct ads_list_t* list);
 
-// if struct has deallocator returns NULL, value otherwise
-void* adslist_pop(struct adslist_t* list);
+// returns pointer to head element (NULL if empty)
+void* ads_list_pop(struct ads_list_t* list);

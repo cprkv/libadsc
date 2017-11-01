@@ -14,8 +14,13 @@
 *.a
 *.la
 *.lo
-build
+
+build/*
 !build/.gitkeep
+
+tests/build/*
+tests/bin/*
+!tests/build/.gitkeep
 
 # Shared objects (inc. Windows DLLs)
 *.dll
