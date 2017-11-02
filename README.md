@@ -20,7 +20,7 @@ If some tests is failed, then libadsc is not ready to use in your project.
 ## Installation
 
 **Attention:**  
-Before install you should run tests. Otherwise, all the things happend only on your own responsibility.
+Before install you should run tests. Otherwise, all the things happend is only on your own responsibility.
 
 To install adsc you need to execute shell comands:
  * `cd build`

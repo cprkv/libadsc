@@ -4,7 +4,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../bin")
 
 set(sources 
     source/lists.c
-    source/static.c
 )
 
 message("Using GNU compiler")
