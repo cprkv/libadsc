@@ -11,6 +11,12 @@ enum test_result_t list_for_each();
 enum test_result_t list_contains_null();
 enum test_result_t list_nested();
 
+// alloc.c
+enum test_result_t alloc_pool_create();
+enum test_result_t alloc_pool_create_int();
+enum test_result_t alloc_pool_custom();
+enum test_result_t alloc_pool_realloc();
+
 int main()
 {
     test_run_rtf(test_add(list_create),
@@ -21,6 +27,12 @@ int main()
                  test_add(list_for_each),
                  test_add(list_contains_null),
                  test_add(list_nested),
+
+                 test_add(alloc_pool_create),
+                 test_add(alloc_pool_create_int),
+                 test_add(alloc_pool_custom),
+                 test_add(alloc_pool_realloc),
+
                  NULL);
     return 0;
 }

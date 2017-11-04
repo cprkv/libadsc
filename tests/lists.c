@@ -6,12 +6,13 @@ enum test_result_t list_create()
     ads_list_t* lst = ads_list_create();
     test_assert(lst != NULL);
 
-    ads_list_destroy(&lst, free);
+    ads_list_destroy(&lst);
     test_assert(lst == NULL);
 
     return TEST_RESULT_OK;
 }
 
+// VALGRIND WARNINGS HERE, BUT IT'S OK!
 enum test_result_t list_push_top_1()
 {
     ads_list_t* lst = ads_list_create();
@@ -21,23 +22,27 @@ enum test_result_t list_push_top_1()
     test_assert(ads_list_empty(lst));
     test_assert(lst->size == 0);
 
-    ads_list_push(lst, ptr);
+    ads_list_push(lst, &ptr, sizeof(int));
     test_assert(ads_list_top(lst) != NULL);
     test_assert(lst->size == 1);
     test_assert(!ads_list_empty(lst));
 
-    int* top = ads_list_top(lst);
-    test_assert(*top == 228);
+    int** top = ads_list_top(lst);
+    test_assert(**top == 228); // Use of uninitialised value of size 8
     test_assert(lst->size == 1);
 
-    int* back = ads_list_pop(lst);
-    test_assert(back == ptr);
+    int* back = NULL;
+    ads_list_pop(lst, &back, sizeof(int*));
     test_assert(lst->size == 0);
     test_assert(ads_list_top(lst) == NULL);
     test_assert(ads_list_empty(lst));
+    test_assert(
+        back ==
+        ptr); // Conditional jump or move depends on uninitialised value(s)
 
-    free(back);
-    ads_list_destroy(&lst, free);
+    free(back); // Conditional jump or move depends on uninitialised
+                // value(s)
+    ads_list_destroy(&lst);
 
     return TEST_RESULT_OK;
 }
@@ -45,7 +50,7 @@ enum test_result_t list_push_top_1()
 enum test_result_t list_push_top_2()
 {
     ads_list_t* lst = ads_list_create();
-    int* ptr;
+    int ptr;
 
     test_assert((int*) ads_list_top(lst) == NULL);
 
@@ -58,20 +63,17 @@ enum test_result_t list_push_top_2()
     ads_list_push_value(lst, int, 7);
     test_assert(*(int*) ads_list_top(lst) == 7);
 
-    ptr = ads_list_pop(lst);
-    test_assert(*ptr == 7);
+    ads_list_pop(lst, &ptr, sizeof(int));
+    test_assert(ptr == 7);
     test_assert(*(int*) ads_list_top(lst) == 8);
-    free(ptr);
 
-    ptr = ads_list_pop(lst);
-    test_assert(*ptr == 8);
+    ads_list_pop(lst, &ptr, sizeof(int));
+    test_assert(ptr == 8);
     test_assert(*(int*) ads_list_top(lst) == 4);
-    free(ptr);
 
-    ptr = ads_list_pop(lst);
-    test_assert(*ptr == 4);
+    ads_list_pop(lst, &ptr, sizeof(int));
+    test_assert(ptr == 4);
     test_assert((int*) ads_list_top(lst) == NULL);
-    free(ptr);
 
     ads_list_push_value(lst, int, 4);
     test_assert(*(int*) ads_list_top(lst) == 4);
@@ -105,7 +107,7 @@ enum test_result_t list_push_top_2()
         i++;
     }
 
-    ads_list_destroy(&lst, free);
+    ads_list_destroy(&lst);
     test_assert(lst == NULL);
 
     return TEST_RESULT_OK;
@@ -134,11 +136,11 @@ enum test_result_t list_for_value()
 
     test_assert(i == 6);
 
-    ads_list_clear(lst, free);
+    ads_list_clear_base(lst);
     test_assert(lst->size == 0);
     test_assert(ads_list_empty(lst));
 
-    ads_list_destroy(&lst, free);
+    ads_list_destroy(&lst);
 
     return TEST_RESULT_OK;
 }
@@ -166,7 +168,7 @@ enum test_result_t list_static()
 
     test_assert(i == 6);
 
-    ads_list_clear(&lst, free);
+    ads_list_clear_base(&lst);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
@@ -194,16 +196,16 @@ enum test_result_t list_for_each()
 
     test_assert(sum == 17);
 
-    ads_list_clear(&lst, free);
+    ads_list_clear_base(&lst);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
     return TEST_RESULT_OK;
 }
 
-void list_contains_null_remover(void* ptr)
+void list_contains_null_remover(void** ptr)
 {
-    if (ptr) free(ptr);
+    free(*ptr);
 }
 
 enum test_result_t list_contains_null()
@@ -211,20 +213,16 @@ enum test_result_t list_contains_null()
     ads_list_t lst;
     ads_list_init(&lst);
 
-    ads_list_push(&lst, malloc(sizeof(int)));
-    ads_list_push(&lst, NULL);
-    ads_list_push(&lst, malloc(sizeof(int)));
+    void* ptr = malloc(sizeof(int));
+    ads_list_push(&lst, &ptr, sizeof(void*));
+    ptr = malloc(sizeof(int));
+    ads_list_push(&lst, &ptr, sizeof(void*));
 
-    ads_list_clear(&lst, list_contains_null_remover);
+    ads_list_clear(&lst, list_contains_null_remover, void*);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
     return TEST_RESULT_OK;
-}
-
-void list_nested_remover(void* nested)
-{
-    ads_list_destroy((ads_list_t**) &nested, free);
 }
 
 enum test_result_t list_nested()
@@ -242,12 +240,12 @@ enum test_result_t list_nested()
      *   |
      *   -
      */
-    
+
     ads_list_t* lst = ads_list_create();
 
     for (int i = 0; i < 3; i++)
     {
-        ads_list_t* nested = ads_list_push(lst, ads_list_create());
+        ads_list_t* nested = ads_list_push(lst, NULL, sizeof(ads_list_t));
 
         ads_list_push_value(nested, int, i * 3 + 0);
         ads_list_push_value(nested, int, i * 3 + 1);
@@ -275,7 +273,12 @@ enum test_result_t list_nested()
     test_assert(sum_2 == 36);
 
     // destroys all nested lists and main list itself
-    ads_list_destroy(&lst, list_nested_remover);
+    while (!ads_list_empty(lst))
+    {
+        ads_list_clear_base(ads_list_top(lst));
+        ads_list_pop(lst, NULL, 0);
+    }
+    ads_list_destroy(&lst);
     test_assert(lst == NULL);
 
     return TEST_RESULT_OK;
