@@ -33,9 +33,7 @@
                 "/usr/include",
                 "/usr/include/x86_64-linux-gnu",
                 "${workspaceRoot}",
-                "${workspaceRoot}/include",
-                "/usr/include/c++/7/tr1",
-                "/usr/include/c++/7/x86_64-redhat-linux"
+                "${workspaceRoot}/include"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",

@@ -10,7 +10,7 @@ Standard: Cpp11
 UseTab: Never
 IndentWidth: '4'
 BreakBeforeBraces: Allman
-AllowShortIfStatementsOnASingleLine: 'true'
+AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortFunctionsOnASingleLine: 'false'
 PointerAlignment: 'Left'
 BinPackArguments: 'false'

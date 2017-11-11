@@ -11,6 +11,11 @@ enum test_result_t list_for_each();
 enum test_result_t list_contains_null();
 enum test_result_t list_nested();
 
+enum test_result_t dlist_create();
+enum test_result_t dlist_push_top_1();
+enum test_result_t dlist_push_top_2();
+enum test_result_t dlist_static();
+
 // alloc.c
 enum test_result_t alloc_pool_create();
 enum test_result_t alloc_pool_create_int();
@@ -28,6 +33,11 @@ int main()
                  test_add(list_for_each),
                  test_add(list_contains_null),
                  test_add(list_nested),
+
+                 test_add(dlist_create),
+                 test_add(dlist_push_top_1),
+                 test_add(dlist_push_top_2),
+                 test_add(dlist_static),
 
                  test_add(alloc_pool_create),
                  test_add(alloc_pool_create_int),
