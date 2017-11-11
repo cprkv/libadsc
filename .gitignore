@@ -44,4 +44,6 @@ tests/bin/*
 # ---> VisualStudioCode
 .settings
 
-
+docs/*
+!docs/ads_logo.png
+!docs/config.conf

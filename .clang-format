@@ -12,6 +12,7 @@ IndentWidth: '4'
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortFunctionsOnASingleLine: 'false'
+AllowShortBlocksOnASingleLine: 'false'
 PointerAlignment: 'Left'
 BinPackArguments: 'false'
 BinPackParameters: 'false'
