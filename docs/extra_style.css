@@ -1,0 +1,16 @@
+#projectlogo {
+    vertical-align: middle !important;
+}
+
+.memtitle {
+    padding: 8px 12px;
+    font-family: monospace, fixed;
+}
+
+.memname {
+    font-family: monospace, fixed;
+}
+
+.memItemLeft .memItemRight {
+    font-family: monospace, fixed;
+}

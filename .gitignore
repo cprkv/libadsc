@@ -47,3 +47,4 @@ tests/bin/*
 docs/*
 !docs/ads_logo.png
 !docs/config.conf
+!docs/extra_style.css
