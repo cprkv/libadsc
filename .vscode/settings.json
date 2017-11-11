@@ -6,6 +6,7 @@
         "istream": "c",
         "ostream": "c",
         "system_error": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "adsc_internal.h": "c"
     }
 }

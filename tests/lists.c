@@ -204,9 +204,10 @@ enum test_result_t list_for_each()
     return TEST_RESULT_OK;
 }
 
-void list_contains_null_remover(void** ptr)
+void list_contains_null_remover(void* ptr)
 {
-    free(*ptr);
+    if (ptr)
+        free(ptr);
 }
 
 enum test_result_t list_contains_null()
@@ -452,12 +453,12 @@ enum test_result_t dlist_static()
     ads_dlist_t lst;
     ads_dlist_init(&lst);
 
-    ads_dlist_push_front_value(&lst, int, 10);
-    ads_dlist_push_front_value(&lst, int, 8);
-    ads_dlist_push_front_value(&lst, int, 6);
     ads_dlist_push_front_value(&lst, int, 4);
+    ads_dlist_push_back_value(&lst, int, 6);
     ads_dlist_push_front_value(&lst, int, 2);
+    ads_dlist_push_back_value(&lst, int, 8);
     ads_dlist_push_front_value(&lst, int, 0);
+    ads_dlist_push_back_value(&lst, int, 10);
 
     test_assert(lst.size == 6);
     int i = 0;
