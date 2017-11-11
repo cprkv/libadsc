@@ -16,6 +16,7 @@ enum test_result_t alloc_pool_create();
 enum test_result_t alloc_pool_create_int();
 enum test_result_t alloc_pool_custom();
 enum test_result_t alloc_pool_realloc();
+enum test_result_t alloc_pool_reuse();
 
 int main()
 {
@@ -32,6 +33,7 @@ int main()
                  test_add(alloc_pool_create_int),
                  test_add(alloc_pool_custom),
                  test_add(alloc_pool_realloc),
+                 test_add(alloc_pool_reuse),
 
                  NULL);
     return 0;

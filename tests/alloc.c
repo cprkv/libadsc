@@ -88,16 +88,14 @@ enum test_result_t alloc_pool_custom()
     return TEST_RESULT_OK;
 }
 
-enum test_result_t alloc_pool_realloc()
+enum test_result_t alloc_pool_basic_test(ads_alloc_pool_t* pool)
 {
-    ads_alloc_pool_t pool;
-    ads_alloc_pool_init(&pool, sizeof(int), 4);
-    test_assert(pool.size == 0);
+    test_assert(pool->size == 0);
 
 #define alloc_ptr_from_pool(num)                                          \
-    int* ptr_##num = pool.alloc(&pool);                                   \
+    int* ptr_##num = pool->alloc(pool);                                   \
     *ptr_##num = num;                                                     \
-    test_assert(pool.size == num);
+    test_assert(pool->size == num);
 
     alloc_ptr_from_pool(1);
     alloc_ptr_from_pool(2);
@@ -110,16 +108,53 @@ enum test_result_t alloc_pool_realloc()
     test_assert(*ptr_2 == 2);
     test_assert(*ptr_3 == 3);
     test_assert(*ptr_4 == 4);
-    test_assert(pool.alloc(&pool) == NULL);
+    test_assert(pool->alloc(pool) == NULL);
 
-    pool.dealloc(&pool, ptr_1);
-    pool.dealloc(&pool, ptr_3);
-    test_assert(pool.size == 2);
+    pool->dealloc(pool, ptr_1);
+    pool->dealloc(pool, ptr_3);
+    test_assert(pool->size == 2);
 
-    pool.alloc(&pool);
-    
+    pool->alloc(pool);
+
     test_assert(*ptr_2 == 2);
     test_assert(*ptr_4 == 4);
+
+    return TEST_RESULT_OK;
+}
+
+enum test_result_t alloc_pool_realloc()
+{
+    ads_alloc_pool_t pool;
+    ads_alloc_pool_init(&pool, sizeof(int), 4);
+
+    // if not ok - return result
+    enum test_result_t res;
+    if (res = alloc_pool_basic_test(&pool)) return res;
+
+    ads_alloc_pool_clear(&pool);
+
+    return TEST_RESULT_OK;
+}
+
+enum test_result_t alloc_pool_reuse()
+{
+    ads_alloc_pool_t pool;
+    ads_alloc_pool_init(&pool, sizeof(int), 4);
+
+    test_assert(pool.size == 0);
+
+    ads_alloc_pool_clear(&pool);
+    ads_alloc_pool_init(&pool, sizeof(int), 4);
+    test_assert(pool.size == 0);
+
+    // if not ok - return result
+    enum test_result_t res;
+    if (res = alloc_pool_basic_test(&pool)) return res;
+
+    ads_alloc_pool_clear(&pool);
+    ads_alloc_pool_init(&pool, sizeof(int), 4);
+
+    if (res = alloc_pool_basic_test(&pool)) return res;
 
     ads_alloc_pool_clear(&pool);
 

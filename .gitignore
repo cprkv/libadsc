@@ -5,6 +5,8 @@
 *.obj
 *.elf
 
+.vscode/*
+
 # Precompiled Headers
 *.gch
 *.pch

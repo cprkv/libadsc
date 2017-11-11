@@ -246,7 +246,7 @@ enum test_result_t list_nested()
     for (int i = 0; i < 3; i++)
     {
         ads_list_t* nested = ads_list_push(lst, NULL, sizeof(ads_list_t));
-
+        ads_list_init(nested);
         ads_list_push_value(nested, int, i * 3 + 0);
         ads_list_push_value(nested, int, i * 3 + 1);
         ads_list_push_value(nested, int, i * 3 + 2);

@@ -100,10 +100,25 @@ typedef struct
 
 } ads_alloc_pool_t;
 
+typedef struct
+{
+    ads_alloc_pool_t poll;
+    void* next;
+
+} ads_alloc_pool_list_el_t;
+
+typedef struct
+{
+    void* (*alloc)(void* self);
+    void (*dealloc)(void* self, void* ptr);
+
+    ads_alloc_pool_list_el_t* list;
+
+} ads_alloc_pool_list_t;
 
 // ---------------- extern data
 
-// ---------------- methods
+// ---------------- list
 
 // creates linked list with default allocator (on heap)
 ads_list_t* ads_list_create();
@@ -131,6 +146,8 @@ void ads_list_clear_base(ads_list_t* lst);
  */
 void ads_list_destroy(ads_list_t** list);
 
+// ---------------- alloc pool
+
 ads_alloc_pool_t* ads_alloc_pool_create(size_t object_size,
                                         size_t capacity);
 void ads_alloc_pool_init(ads_alloc_pool_t* self,
@@ -138,3 +155,12 @@ void ads_alloc_pool_init(ads_alloc_pool_t* self,
                          size_t capacity);
 void ads_alloc_pool_clear(ads_alloc_pool_t* self);
 void ads_alloc_pool_destroy(ads_alloc_pool_t** self);
+
+// ---------------- alloc pool list -- XXX not ready to use
+ads_alloc_pool_list_t* ads_alloc_pool_list_create(size_t object_size,
+                                                  size_t capacity);
+void ads_alloc_pool_list_init(ads_alloc_pool_list_t* self,
+                              size_t object_size,
+                              size_t capacity);
+void ads_alloc_pool_list_clear(ads_alloc_pool_list_t* self);
+void ads_alloc_pool_list_destroy(ads_alloc_pool_list_t** self);

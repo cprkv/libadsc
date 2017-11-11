@@ -88,3 +88,36 @@ void ads_alloc_pool_destroy(ads_alloc_pool_t** self)
     ads_free(*self);
     *self = NULL;
 }
+
+// ------------- alloc pool list
+
+ads_alloc_pool_list_t* ads_alloc_pool_list_create(size_t object_size,
+                                                  size_t capacity)
+{
+    ads_assert(object_size > 1);
+    ads_assert(capacity > 0);
+    ads_alloc_struct(self, ads_alloc_pool_list_t);
+    ads_alloc_pool_list_init(self, object_size, capacity);
+
+    return self;
+}
+
+void ads_alloc_pool_list_init(ads_alloc_pool_list_t* self,
+                              size_t object_size,
+                              size_t capacity)
+{
+    ads_assert(self);
+    self->list = malloc(sizeof(ads_alloc_pool_list_el_t));
+    self->list->next = NULL;
+    ads_alloc_pool_init(&self->list->poll, object_size, capacity);
+}
+
+void ads_alloc_pool_list_clear(ads_alloc_pool_list_t* self)
+{
+    ads_assert(self);
+}
+
+void ads_alloc_pool_list_destroy(ads_alloc_pool_list_t** self)
+{
+    ads_assert(self && *self);
+}
