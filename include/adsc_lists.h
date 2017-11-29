@@ -1,7 +1,7 @@
 #pragma once
+#include <adsc_base.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <adsc_base.h>
 
 /**
  * File:       adsc_lists.h
@@ -144,6 +144,18 @@ void ads_list_destroy(ads_list_t** list);
          iter = iter->next)                                               \
         op;
 
+#define ads_list_erase_if(lst, type, predicate)                           \
+    {                                                                     \
+        for (ads_list_data_t* __list_iter = lst->head;                    \
+             __list_iter != NULL;)                                        \
+        {                                                                 \
+            ads_list_data_t* __list_iter_next = __list_iter->next;        \
+            if (predicate(ads_list_val(__list_iter, type)))               \
+                ads_list_erase(lst, __list_iter);                         \
+            __list_iter = __list_iter_next;                               \
+        }                                                                 \
+    }
+
 /**
  * Example for list elements allocated with @c malloc:
  * @code
@@ -184,7 +196,7 @@ void ads_list_destroy(ads_list_t** list);
  *      ads_list_auto() lst = ads_list_create();
  *      ads_list_push_value(lst, int, 228);
  *      ...
- *  
+ *
  *  }   // lst automaticly destroys here
  * @endcode
  */

@@ -41,7 +41,7 @@ endif()
 message("ADSC> debug flags   : ${adsc_compile_flags_debug}")
 message("ADSC> release flags : ${adsc_compile_flags_release}")
 
-# ------------ setting up library ------------
+# ------------ setting up libraries ------------
 
 add_library(adsc ${adsc_sources})
 target_compile_options(adsc PRIVATE ${adsc_compile_flags_release})

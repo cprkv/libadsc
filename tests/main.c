@@ -11,6 +11,7 @@ enum test_result_t list_for_each();
 enum test_result_t list_contains_null();
 enum test_result_t list_nested();
 enum test_result_t list_erase();
+enum test_result_t list_erase_if();
 
 enum test_result_t dlist_create();
 enum test_result_t dlist_push_top_1();
@@ -35,6 +36,7 @@ int main()
                  test_add(list_contains_null),
                  test_add(list_nested),
                  test_add(list_erase),
+                 test_add(list_erase_if),
 
                  test_add(dlist_create),
                  test_add(dlist_push_top_1),

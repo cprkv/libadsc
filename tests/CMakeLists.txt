@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(tests C)
 project(testsd C)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/.." "adsc")
+add_subdirectory(.. adsc)
 
 set(tests_sources 
     lists.c
@@ -11,14 +11,33 @@ set(tests_sources
     main.c
 )
 
+# ------------ tuning compiler ------------
+
+if(${CMAKE_C_COMPILER_ID} MATCHES "Clang")
+    set(tests_compiler_clang true)
+    message("tests> using Clang compiler")
+elseif(${CMAKE_C_COMPILER_ID} MATCHES "GNU")
+    set(tests_compiler_gnu true)
+    message("tests> using GNU compiler")
+else()
+    message(FATAL_ERROR "tests is not ready to use with your compiler")
+endif()
+
+if(tests_compiler_clang OR tests_compiler_gnu)
+    set(tests_compile_flags_release -std=c11 -O3 -march=native -Wall)
+    set(tests_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
+endif()
+
+message("tests> debug flags   : ${tests_compile_flags_debug}")
+message("tests> release flags : ${tests_compile_flags_release}")
+
+# ------------ setting up executables ------------
+
 add_executable(tests ${tests_sources})
 add_executable(testsd ${tests_sources})
 
-message("tests> debug flags   : ${adsc_compile_flags_debug}")
-message("tests> release flags : ${adsc_compile_flags_release}")
-
-target_compile_definitions(tests PRIVATE ${adsc_compile_flags_release})
-target_compile_definitions(testsd PRIVATE ${adsc_compile_flags_debug})
+target_compile_options(tests PRIVATE ${tests_compile_flags_release})
+target_compile_options(testsd PRIVATE ${tests_compile_flags_debug})
 
 set_target_properties(tests PROPERTIES 
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"

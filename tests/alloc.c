@@ -129,7 +129,8 @@ enum test_result_t alloc_pool_realloc()
 
     // if not ok - return result
     enum test_result_t res;
-    if (res = alloc_pool_basic_test(&pool)) return res;
+    if ((res = alloc_pool_basic_test(&pool)))
+        return res;
 
     ads_alloc_pool_clear(&pool);
 
@@ -149,12 +150,14 @@ enum test_result_t alloc_pool_reuse()
 
     // if not ok - return result
     enum test_result_t res;
-    if (res = alloc_pool_basic_test(&pool)) return res;
+    if ((res = alloc_pool_basic_test(&pool)))
+        return res;
 
     ads_alloc_pool_clear(&pool);
     ads_alloc_pool_init(&pool, sizeof(int), 4);
 
-    if (res = alloc_pool_basic_test(&pool)) return res;
+    if ((res = alloc_pool_basic_test(&pool)))
+        return res;
 
     ads_alloc_pool_clear(&pool);
 

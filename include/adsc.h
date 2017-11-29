@@ -15,3 +15,4 @@
 
 #include <adsc_alloc.h>
 #include <adsc_lists.h>
+#include <adsc_func.h>

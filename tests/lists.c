@@ -206,13 +206,12 @@ enum test_result_t list_for_each()
 
 enum test_result_t list_erase()
 {
-    auto void rmdeleter(void* ptr);
     ads_list_auto lst = ads_list_create();
 
-    void rmdeleter(void* ptr) 
-    { 
-        ads_list_erase(lst, ptr); 
-    };
+#ifdef __GNU__
+    auto rmdeleter =
+        ads_lambda(void, (void* ptr), { ads_list_erase(lst, ptr); });
+#endif
 
     ads_list_push_value(lst, int, 7);
     ads_list_push_value(lst, int, 6);
@@ -223,22 +222,25 @@ enum test_result_t list_erase()
     ads_list_push_value(lst, int, 1);
     ads_list_push_value(lst, int, 0);
 
+    test_assert(lst->size == 8);
+
     {
         ads_list_auto rmlst = ads_list_create();
 
         ads_list_for(lst, it)
+        {
             if (ads_list_val(it, int) % 2 == 0)
-                ads_list_push_value(lst, void*, it);
-        
+                ads_list_push_value(rmlst, void*, it);
+        }
+
+#ifdef __GNU__
         ads_list_clear(rmlst, rmdeleter, void*);
-        // while (!ads_list_empty(rmlst)) 
-        // { 
-        //     void* val; 
-        //     ads_list_pop(rmlst, &val, sizeof(void*)); 
-        //     ads_list_erase(lst, ptr); 
-        // }
+#else
+        ads_list_for(rmlst, it)
+            ads_list_erase(lst, ads_list_val(it, void*));
+#endif
     }
-        
+
     test_assert(lst->size == 4);
 
     int i = 0;
@@ -248,10 +250,78 @@ enum test_result_t list_erase()
 
         switch (i)
         {
-        case 0: test_assert(val == 1); break;
-        case 1: test_assert(val == 3); break;
-        case 2: test_assert(val == 5); break;
-        case 3: test_assert(val == 7); break;
+        case 0:
+            test_assert(val == 1);
+            break;
+        case 1:
+            test_assert(val == 3);
+            break;
+        case 2:
+            test_assert(val == 5);
+            break;
+        case 3:
+            test_assert(val == 7);
+            break;
+        default:
+            test_assert(false);
+        }
+
+        i++;
+    }
+
+    return TEST_RESULT_OK;
+}
+
+#ifndef __GNU__
+bool lst_erase_condition(int v)
+{
+    return v % 2 == 0;
+}
+#endif
+
+enum test_result_t list_erase_if()
+{
+    ads_list_auto lst = ads_list_create();
+
+    ads_list_push_value(lst, int, 7);
+    ads_list_push_value(lst, int, 6);
+    ads_list_push_value(lst, int, 5);
+    ads_list_push_value(lst, int, 4);
+    ads_list_push_value(lst, int, 3);
+    ads_list_push_value(lst, int, 2);
+    ads_list_push_value(lst, int, 1);
+    ads_list_push_value(lst, int, 0);
+
+    test_assert(lst->size == 8);
+
+#ifndef __GNU__
+    ads_list_erase_if(lst, int, lst_erase_condition);
+#else
+    auto condition = ads_lambda(bool, (int v), { return v % 2 == 0; });
+    ads_list_erase_if(lst, int, condition);
+#endif
+
+    test_assert(lst->size == 4);
+
+    int i = 0;
+    ads_list_for(lst, it)
+    {
+        int val = ads_list_val(it, int);
+
+        switch (i)
+        {
+        case 0:
+            test_assert(val == 1);
+            break;
+        case 1:
+            test_assert(val == 3);
+            break;
+        case 2:
+            test_assert(val == 5);
+            break;
+        case 3:
+            test_assert(val == 7);
+            break;
         default:
             test_assert(false);
         }
