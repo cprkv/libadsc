@@ -10,29 +10,24 @@
 
 // -------------------------------- list --------------------------------
 
-ads_list_t* ads_list_create()
+ads_list_t* ads_list_create_ref(size_t val_size)
 {
     ads_alloc_struct(list, ads_list_t);
     ads_assert(list);
-    ads_list_init(list);
+    ads_list_init(list, val_size);
 
     return list;
 }
 
-void* ads_list_push(ads_list_t* list, void* value, size_t size)
+void* ads_list_push(ads_list_t* list, void* value)
 {
     ads_assert(list);
-    ads_assert(size > sizeof(char));
-    ads_list_data_t* elem = malloc(sizeof(void*) + size);
+    ads_list_data_t* elem = malloc(sizeof(void*) + list->val_size);
     ads_assert(elem);
     elem->next = list->head;
 
     if (value)
-        memcpy(&(elem->value), value, size);
-    // #ifdef DEBUG
-    //     else
-    //         memset(&(elem->value), 0, size);
-    // #endif
+        memcpy(&(elem->value), value, list->val_size);
 
     list->head = elem;
     list->size++;
@@ -74,7 +69,7 @@ void* ads_list_top(ads_list_t* list)
     return list->head ? &(list->head->value) : NULL;
 }
 
-void ads_list_pop(ads_list_t* list, void* where, size_t size)
+void ads_list_pop(ads_list_t* list, void* where)
 {
     ads_assert(list);
 
@@ -84,7 +79,7 @@ void ads_list_pop(ads_list_t* list, void* where, size_t size)
         list->head = tmp->next;
 
         if (where)
-            memcpy(where, &(tmp->value), size);
+            memcpy(where, &(tmp->value), list->val_size);
 
         ads_free(tmp);
         list->size--;
@@ -100,17 +95,13 @@ bool ads_list_empty(ads_list_t* list)
 void ads_list_destroy(ads_list_t** list)
 {
     ads_assert(list && *list);
-    ads_list_clear_base(*list);
+    ads_list_clear_ref(*list, NULL);
     ads_free((*list));
     *list = NULL;
 }
 
-void ads_list_clear_base(ads_list_t* lst)
+void ads_list_clear_ref(ads_list_t* lst, void (*remover)(void*))
 {
-    // if (lst->head)
-    //     while (!ads_list_empty(lst))
-    //         ads_list_pop(lst, NULL, 0);
-
     ads_assert(lst);
     ads_list_data_t* tmp = lst->head;
     ads_list_data_t* freed;
@@ -118,6 +109,10 @@ void ads_list_clear_base(ads_list_t* lst)
     while (tmp)
     {
         freed = tmp;
+
+        if (remover)
+            remover(&freed->value);
+
         tmp = tmp->next;
         ads_free(freed);
     }
@@ -126,11 +121,13 @@ void ads_list_clear_base(ads_list_t* lst)
     lst->size = 0;
 }
 
-void ads_list_init(ads_list_t* list)
+void ads_list_init(ads_list_t* list, size_t val_size)
 {
     ads_assert(list);
-    list->size = 0;
+    ads_assert(val_size >= sizeof(char));
     list->head = NULL;
+    list->size = 0;
+    list->val_size = val_size;
 }
 
 // -------------------------------- dlist --------------------------------

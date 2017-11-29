@@ -3,7 +3,7 @@
 
 enum test_result_t list_create()
 {
-    ads_list_t* lst = ads_list_create();
+    ads_list_t* lst = ads_list_create(int);
     test_assert(lst != NULL);
 
     ads_list_destroy(&lst);
@@ -14,14 +14,14 @@ enum test_result_t list_create()
 
 enum test_result_t list_push_top_1()
 {
-    ads_list_t* lst = ads_list_create();
+    __auto_type lst = ads_list_create(int*);
     int* ptr = malloc(sizeof(int));
     *ptr = 228;
 
     test_assert(ads_list_empty(lst));
     test_assert(lst->size == 0);
 
-    ads_list_push(lst, &ptr, sizeof(int*));
+    ads_list_push(lst, &ptr);
     test_assert(ads_list_top(lst) != NULL);
     test_assert(lst->size == 1);
     test_assert(!ads_list_empty(lst));
@@ -31,7 +31,7 @@ enum test_result_t list_push_top_1()
     test_assert(lst->size == 1);
 
     int* back = NULL;
-    ads_list_pop(lst, &back, sizeof(int*));
+    ads_list_pop(lst, &back);
     test_assert(lst->size == 0);
     test_assert(ads_list_top(lst) == NULL);
     test_assert(ads_list_empty(lst));
@@ -45,42 +45,42 @@ enum test_result_t list_push_top_1()
 
 enum test_result_t list_push_top_2()
 {
-    ads_list_t* lst = ads_list_create();
+    ads_list_t* lst = ads_list_create(int);
     int ptr;
 
     test_assert((int*) ads_list_top(lst) == NULL);
     test_assert(ads_list_empty(lst));
 
-    ads_list_push_value(lst, int, 4);
+    ads_list_push_value(lst, 4);
     test_assert(*(int*) ads_list_top(lst) == 4);
     test_assert(!ads_list_empty(lst));
 
-    ads_list_push_value(lst, int, 8);
+    ads_list_push_value(lst, 8);
     test_assert(*(int*) ads_list_top(lst) == 8);
 
-    ads_list_push_value(lst, int, 7);
+    ads_list_push_value(lst, 7);
     test_assert(*(int*) ads_list_top(lst) == 7);
 
-    ads_list_pop(lst, &ptr, sizeof(int));
+    ads_list_pop(lst, &ptr);
     test_assert(ptr == 7);
     test_assert(*(int*) ads_list_top(lst) == 8);
 
-    ads_list_pop(lst, &ptr, sizeof(int));
+    ads_list_pop(lst, &ptr);
     test_assert(ptr == 8);
     test_assert(*(int*) ads_list_top(lst) == 4);
 
-    ads_list_pop(lst, &ptr, sizeof(int));
+    ads_list_pop(lst, &ptr);
     test_assert(ptr == 4);
     test_assert((int*) ads_list_top(lst) == NULL);
     test_assert(ads_list_empty(lst));
 
-    ads_list_push_value(lst, int, 4);
+    ads_list_push_value(lst, 4);
     test_assert(*(int*) ads_list_top(lst) == 4);
 
-    ads_list_push_value(lst, int, 3);
+    ads_list_push_value(lst, 3);
     test_assert(*(int*) ads_list_top(lst) == 3);
 
-    ads_list_push_value(lst, int, 2);
+    ads_list_push_value(lst, 2);
     test_assert(*(int*) ads_list_top(lst) == 2);
 
     test_assert(!ads_list_empty(lst));
@@ -116,14 +116,14 @@ enum test_result_t list_push_top_2()
 
 enum test_result_t list_for_value()
 {
-    ads_list_t* lst = ads_list_create();
+    ads_list_t* lst = ads_list_create(int);
 
-    ads_list_push_value(lst, int, 10);
-    ads_list_push_value(lst, int, 8);
-    ads_list_push_value(lst, int, 6);
-    ads_list_push_value(lst, int, 4);
-    ads_list_push_value(lst, int, 2);
-    ads_list_push_value(lst, int, 0);
+    ads_list_push_value(lst, 10);
+    ads_list_push_value(lst, 8);
+    ads_list_push_value(lst, 6);
+    ads_list_push_value(lst, 4);
+    ads_list_push_value(lst, 2);
+    ads_list_push_value(lst, 0);
 
     test_assert(lst->size == 6);
     int i = 0;
@@ -137,7 +137,7 @@ enum test_result_t list_for_value()
 
     test_assert(i == 6);
 
-    ads_list_clear_base(lst);
+    ads_list_clear(lst);
     test_assert(lst->size == 0);
     test_assert(ads_list_empty(lst));
 
@@ -149,14 +149,14 @@ enum test_result_t list_for_value()
 enum test_result_t list_static()
 {
     ads_list_t lst;
-    ads_list_init(&lst);
+    ads_list_init(&lst, sizeof(int));
 
-    ads_list_push_value(&lst, int, 10);
-    ads_list_push_value(&lst, int, 8);
-    ads_list_push_value(&lst, int, 6);
-    ads_list_push_value(&lst, int, 4);
-    ads_list_push_value(&lst, int, 2);
-    ads_list_push_value(&lst, int, 0);
+    ads_list_push_value(&lst, 10);
+    ads_list_push_value(&lst, 8);
+    ads_list_push_value(&lst, 6);
+    ads_list_push_value(&lst, 4);
+    ads_list_push_value(&lst, 2);
+    ads_list_push_value(&lst, 0);
 
     test_assert(lst.size == 6);
     int i = 0;
@@ -169,7 +169,7 @@ enum test_result_t list_static()
 
     test_assert(i == 6);
 
-    ads_list_clear_base(&lst);
+    ads_list_clear(&lst);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
@@ -179,16 +179,16 @@ enum test_result_t list_static()
 enum test_result_t list_for_each()
 {
     ads_list_t lst;
-    ads_list_init(&lst);
+    ads_list_init(&lst, sizeof(int));
 
-    ads_list_push_value(&lst, int, 8);
-    ads_list_push_value(&lst, int, 6);
-    ads_list_push_value(&lst, int, -3);
-    ads_list_push_value(&lst, int, 0);
-    ads_list_push_value(&lst, int, 4);
-    ads_list_push_value(&lst, int, 2);
-    ads_list_push_value(&lst, int, 10);
-    ads_list_push_value(&lst, int, -10);
+    ads_list_push_value(&lst, 8);
+    ads_list_push_value(&lst, 6);
+    ads_list_push_value(&lst, -3);
+    ads_list_push_value(&lst, 0);
+    ads_list_push_value(&lst, 4);
+    ads_list_push_value(&lst, 2);
+    ads_list_push_value(&lst, 10);
+    ads_list_push_value(&lst, -10);
 
     test_assert(lst.size == 8);
 
@@ -197,7 +197,7 @@ enum test_result_t list_for_each()
 
     test_assert(sum == 17);
 
-    ads_list_clear_base(&lst);
+    ads_list_clear(&lst);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
@@ -206,35 +206,32 @@ enum test_result_t list_for_each()
 
 enum test_result_t list_erase()
 {
-    ads_list_auto lst = ads_list_create();
+    ads_list_auto lst = ads_list_create(int);
 
-#ifdef __GNU__
-    auto rmdeleter =
-        ads_lambda(void, (void* ptr), { ads_list_erase(lst, ptr); });
-#endif
-
-    ads_list_push_value(lst, int, 7);
-    ads_list_push_value(lst, int, 6);
-    ads_list_push_value(lst, int, 5);
-    ads_list_push_value(lst, int, 4);
-    ads_list_push_value(lst, int, 3);
-    ads_list_push_value(lst, int, 2);
-    ads_list_push_value(lst, int, 1);
-    ads_list_push_value(lst, int, 0);
+    ads_list_push_value(lst, 7);
+    ads_list_push_value(lst, 6);
+    ads_list_push_value(lst, 5);
+    ads_list_push_value(lst, 4);
+    ads_list_push_value(lst, 3);
+    ads_list_push_value(lst, 2);
+    ads_list_push_value(lst, 1);
+    ads_list_push_value(lst, 0);
 
     test_assert(lst->size == 8);
 
     {
-        ads_list_auto rmlst = ads_list_create();
+        ads_list_auto rmlst = ads_list_create(void*);
 
         ads_list_for(lst, it)
         {
             if (ads_list_val(it, int) % 2 == 0)
-                ads_list_push_value(rmlst, void*, it);
+                ads_list_push_value(rmlst, it);
         }
 
-#ifdef __GNU__
-        ads_list_clear(rmlst, rmdeleter, void*);
+#ifdef ads_compiler_gnuc
+        __auto_type rmdeleter =
+            ads_lambda(void, (void* ptr), { ads_list_erase(lst, *(void**)ptr); });
+        ads_list_clear(rmlst, rmdeleter);
 #else
         ads_list_for(rmlst, it)
             ads_list_erase(lst, ads_list_val(it, void*));
@@ -272,7 +269,7 @@ enum test_result_t list_erase()
     return TEST_RESULT_OK;
 }
 
-#ifndef __GNU__
+#ifndef ads_compiler_gnuc
 bool lst_erase_condition(int v)
 {
     return v % 2 == 0;
@@ -281,23 +278,24 @@ bool lst_erase_condition(int v)
 
 enum test_result_t list_erase_if()
 {
-    ads_list_auto lst = ads_list_create();
+    ads_list_auto lst = ads_list_create(int);
 
-    ads_list_push_value(lst, int, 7);
-    ads_list_push_value(lst, int, 6);
-    ads_list_push_value(lst, int, 5);
-    ads_list_push_value(lst, int, 4);
-    ads_list_push_value(lst, int, 3);
-    ads_list_push_value(lst, int, 2);
-    ads_list_push_value(lst, int, 1);
-    ads_list_push_value(lst, int, 0);
+    ads_list_push_value(lst, 7);
+    ads_list_push_value(lst, 6);
+    ads_list_push_value(lst, 5);
+    ads_list_push_value(lst, 4);
+    ads_list_push_value(lst, 3);
+    ads_list_push_value(lst, 2);
+    ads_list_push_value(lst, 1);
+    ads_list_push_value(lst, 0);
 
     test_assert(lst->size == 8);
 
-#ifndef __GNU__
+#ifndef ads_compiler_gnuc
     ads_list_erase_if(lst, int, lst_erase_condition);
 #else
-    auto condition = ads_lambda(bool, (int v), { return v % 2 == 0; });
+    __auto_type condition =
+        ads_lambda(bool, (int v), { return v % 2 == 0; });
     ads_list_erase_if(lst, int, condition);
 #endif
 
@@ -335,25 +333,30 @@ enum test_result_t list_erase_if()
 
 void list_contains_null_remover(void* ptr)
 {
-    if (ptr)
-        free(ptr);
+    if (*(void**) ptr)
+        free(*(void**) ptr);
 }
 
 enum test_result_t list_contains_null()
 {
     ads_list_t lst;
-    ads_list_init(&lst);
+    ads_list_init(&lst, sizeof(void*));
 
     void* ptr = malloc(sizeof(int));
-    ads_list_push(&lst, &ptr, sizeof(void*));
+    ads_list_push(&lst, &ptr);
     ptr = malloc(sizeof(int));
-    ads_list_push(&lst, &ptr, sizeof(void*));
+    ads_list_push(&lst, &ptr);
 
-    ads_list_clear(&lst, list_contains_null_remover, void*);
+    ads_list_clear(&lst, list_contains_null_remover);
     test_assert(lst.size == 0);
     test_assert(ads_list_empty(&lst));
 
     return TEST_RESULT_OK;
+}
+
+void nested_list_clear_func(void* ptr)
+{
+    ads_list_clear(ptr);
 }
 
 enum test_result_t list_nested()
@@ -372,15 +375,15 @@ enum test_result_t list_nested()
      *   -
      */
 
-    ads_list_t* lst = ads_list_create();
+    ads_list_t* lst = ads_list_create(ads_list_t);
 
     for (int i = 0; i < 3; i++)
     {
-        ads_list_t* nested = ads_list_push(lst, NULL, sizeof(ads_list_t));
-        ads_list_init(nested);
-        ads_list_push_value(nested, int, i * 3 + 0);
-        ads_list_push_value(nested, int, i * 3 + 1);
-        ads_list_push_value(nested, int, i * 3 + 2);
+        ads_list_t* nested = ads_list_push(lst, NULL);
+        ads_list_init(nested, sizeof(int));
+        ads_list_push_value(nested, i * 3 + 0);
+        ads_list_push_value(nested, i * 3 + 1);
+        ads_list_push_value(nested, i * 3 + 2);
     }
 
     test_assert(lst->size == 3);
@@ -406,18 +409,23 @@ enum test_result_t list_nested()
     /*
         while (!ads_list_empty(lst))
         {
-            ads_list_clear_base(ads_list_top(lst));
+            ads_list_clear(ads_list_top(lst));
             ads_list_pop(lst, NULL, 0);
         }
     */
 
     // second method to destroy nested lists
     /*
-        ads_list_clear(lst, ads_list_clear_base, ads_list_t);
+        ads_list_clear(lst, nested_list_clear_func);
     */
 
     // but i used this method
-    ads_list_for(lst, it) ads_list_clear_base((ads_list_t*) &it->value);
+#ifdef ads_compiler_gnuc
+    ads_list_clear(lst,
+                   ads_lambda(void, (void* n), { ads_list_clear(n); }));
+#else
+    ads_list_clear(lst, nested_list_clear_func);
+#endif
 
     ads_list_destroy(&lst);
     test_assert(lst == NULL);

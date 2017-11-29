@@ -27,19 +27,22 @@ typedef struct
 {
     ads_list_data_t* head;
     size_t size;
+    size_t val_size;
 } ads_list_t;
+
+#define ads_list_create(type) ads_list_create_ref(sizeof(type))
 
 /**
  * @brief Creates linked list with default allocator (on heap).
  * @note You should use #ads_list_destroy when list is not needed.
  */
-ads_list_t* ads_list_create();
+ads_list_t* ads_list_create_ref(size_t val_size);
 
 /**
  * @brief Initialises linked list.
  * @param list  Pointer to allocated linked list.
  */
-void ads_list_init(ads_list_t* list);
+void ads_list_init(ads_list_t* list, size_t val_size);
 
 /**
  * @brief  Inserts element in linked list (makes copy of @p value).
@@ -47,7 +50,6 @@ void ads_list_init(ads_list_t* list);
  * @param  list  Pointer to linked list.
  * @param  value Pointer to user data which user wants to
  *               insert (may be @c NULL).
- * @param  size  Size of user's @p value in bytes.
  * @return Pointer to value of created list element.
  *
  * @note   User's value will be copied from pointer's value if
@@ -55,7 +57,7 @@ void ads_list_init(ads_list_t* list);
  * for list element, and returns pointer where user can store
  * actual value.
  */
-void* ads_list_push(ads_list_t* list, void* value, size_t size);
+void* ads_list_push(ads_list_t* list, void* value);
 
 void ads_list_erase(ads_list_t* list, ads_list_data_t* iter);
 
@@ -72,10 +74,9 @@ void* ads_list_top(ads_list_t* list);
  * @param  list   Pointer to linked list.
  * @param  where  Pointer user allocated memory where head element
  *                of linked list will be copied.
- * @param  size   Size of element user wants to get.
  * @note   If list is empty then nothing will happend.
  */
-void ads_list_pop(ads_list_t* list, void* where, size_t size);
+void ads_list_pop(ads_list_t* list, void* where);
 
 /**
  * @brief  Returns @c TRUE if list is empty.
@@ -88,7 +89,7 @@ bool ads_list_empty(ads_list_t* list);
  * @param  list   Pointer to linked list.
  * @note   All user data will be destroyed as pod values.
  */
-void ads_list_clear_base(ads_list_t* lst);
+void ads_list_clear_ref(ads_list_t* lst, void (*remover)(void*));
 
 /**
  * @brief  Destroys list if it was allocated with #ads_list_create
@@ -156,6 +157,11 @@ void ads_list_destroy(ads_list_t** list);
         }                                                                 \
     }
 
+#define ads_list_clear_macro_1(lst) ads_list_clear_ref(lst, NULL)
+#define ads_list_clear_macro_2(lst, remover)                              \
+    ads_list_clear_ref(lst, remover)
+#define ads_list_clear_macro(_1, _2, NAME, ...) NAME
+
 /**
  * Example for list elements allocated with @c malloc:
  * @code
@@ -165,15 +171,10 @@ void ads_list_destroy(ads_list_t** list);
  *   ads_list_clear(lst, free, void*);
  * @endcode
  */
-#define ads_list_clear(lst, deleter, type)                                \
-    {                                                                     \
-        while (!ads_list_empty(lst))                                      \
-        {                                                                 \
-            type val;                                                     \
-            ads_list_pop(lst, &val, sizeof(type));                        \
-            deleter(val);                                                 \
-        }                                                                 \
-    }
+#define ads_list_clear(...)                                               \
+    ads_list_clear_macro(__VA_ARGS__,                                     \
+                         ads_list_clear_macro_2,                          \
+                         ads_list_clear_macro_1)(__VA_ARGS__)
 
 /**
  * Example for @c ads_list_t*:
@@ -184,8 +185,8 @@ void ads_list_destroy(ads_list_t** list);
  *   ads_list_destroy(lst, free);
  * @endcode
  */
-#define ads_list_push_value(lst, type, el)                                \
-    *(type*) ads_list_push(lst, NULL, sizeof(type)) = el
+#define ads_list_push_value(lst, el)                                      \
+    *(__typeof__(el)*) ads_list_push(lst, NULL) = el
 
 /**
  * @brief Auto destroys list.

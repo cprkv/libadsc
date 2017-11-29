@@ -6,8 +6,6 @@
  * Desc:       functional macro
  */
 
-#ifdef __GCC__
-
 // #define ads_lambda_1(ret, in1, function_like)
 //     ({
 //         ret __fn__(in1 _1) function_like;
@@ -59,6 +57,8 @@
 //                   ads_lambda_5,
 //                   ads_lambda_6)
 //     (__VA_ARGS__)
+
+#ifdef ads_compiler_gnuc
 
 #define ads_lambda(l_ret_type, l_arguments, l_body)                       \
     ({                                                                    \
