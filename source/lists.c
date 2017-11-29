@@ -40,6 +40,34 @@ void* ads_list_push(ads_list_t* list, void* value, size_t size)
     return &(elem->value);
 }
 
+void ads_list_erase(ads_list_t* list, ads_list_data_t* iter)
+{
+    ads_assert(list);
+    ads_assert(iter);
+
+    if (!list->head)
+        return;
+
+    if (list->head == iter)
+    {
+        list->head = iter->next;
+        ads_free(iter);
+        list->size--;
+    }
+    else 
+    {
+        ads_list_data_t* i = list->head;
+        for (; i->next != iter && i->next != NULL; i = i->next);
+
+        if (i->next) 
+        {
+            i->next = iter->next;
+            ads_free(iter);
+            list->size--;
+        }
+    }
+}
+
 void* ads_list_top(ads_list_t* list)
 {
     ads_assert(list);
@@ -137,7 +165,7 @@ void* ads_dlist_push_back(ads_dlist_t* list, void* value, size_t size)
 
     if (list->back)
         list->back->next = elem;
-    else 
+    else
         list->front = elem;
 
     list->back = elem;
@@ -160,7 +188,7 @@ void* ads_dlist_push_front(ads_dlist_t* list, void* value, size_t size)
 
     if (list->front)
         list->front->prev = elem;
-    else 
+    else
         list->back = elem;
 
     list->front = elem;
@@ -192,7 +220,7 @@ void ads_dlist_pop_front(ads_dlist_t* list, void* where, size_t size)
 
         if (list->front)
             list->front->prev = NULL;
-        else 
+        else
             list->back = NULL;
 
         if (where)
@@ -214,7 +242,7 @@ void ads_dlist_pop_back(ads_dlist_t* list, void* where, size_t size)
 
         if (list->back)
             list->back->next = NULL;
-        else 
+        else
             list->front = NULL;
 
         if (where)

@@ -40,3 +40,9 @@ To generate documentation execute shell comands:
 
 Then, you can see documentation by opening file `docs/html/index.html` in your web browser.  
 In most cases you will need to open tab **Modules**. All usefull information will be defined here in groups.
+
+## P.S.
+ * Just for fun - you could count lines of library code using:  
+    `cloc tests source include --force-lang=C,h --include-lang=C`  
+   Or do it without tests:  
+    `cloc source include --force-lang=C,h --include-lang=C`  

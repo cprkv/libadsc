@@ -121,3 +121,8 @@ void ads_alloc_pool_list_destroy(ads_alloc_pool_list_t** self)
 {
     ads_assert(self && *self);
 }
+
+void ads_free_impl(void** ptr)
+{
+    free(*ptr);
+}
