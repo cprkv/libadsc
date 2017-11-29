@@ -76,10 +76,10 @@ enum test_result_t alloc_pool_custom()
     ptr2->c = 'T';
 
     test_assert(ptr->a == 'a');
-    test_assert(ptr->b == 2.39f);
+    test_assert(fabs(ptr->b - 2.39f) < 0.001);
     test_assert(ptr->c == 'c');
     test_assert(ptr2->a == '9');
-    test_assert(ptr2->b == 4.18f);
+    test_assert(fabs(ptr2->b - 4.18f) < 0.001);
     test_assert(ptr2->c == 'T');
     test_assert(pool.size == 2);
 
