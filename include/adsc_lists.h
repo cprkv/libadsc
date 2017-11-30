@@ -224,46 +224,48 @@ typedef struct
     ads_dlist_data_t* front;
     ads_dlist_data_t* back;
     size_t size;
+    size_t val_size;
 } ads_dlist_t;
 
 /** creates linked list with default allocator (on heap) */
-ads_dlist_t* ads_dlist_create();
+ads_dlist_t* ads_dlist_create_ref(size_t val_size);
 
 /** initialises linked list without allocating memory */
-void ads_dlist_init(ads_dlist_t* list);
-
-// FIXME: what if we need to insert some element in some place in list,
-//        and what if need to pop some element in some place in list?
+void ads_dlist_init(ads_dlist_t* list, size_t val_size);
 
 /** adds some data to linked list */
-void* ads_dlist_push_back(ads_dlist_t* list, void* value, size_t size);
-void* ads_dlist_push_front(ads_dlist_t* list, void* value, size_t size);
+void* ads_dlist_push_back(ads_dlist_t* list, void* value);
+void* ads_dlist_push_front(ads_dlist_t* list, void* value);
 
 /** returns top element if list (NULL if empty) */
 void* ads_dlist_top_front(ads_dlist_t* list);
 void* ads_dlist_top_back(ads_dlist_t* list);
 
 /** returns pointer to head element (NULL if empty) */
-void ads_dlist_pop_front(ads_dlist_t* list, void* where, size_t size);
-void ads_dlist_pop_back(ads_dlist_t* list, void* where, size_t size);
+void ads_dlist_pop_front(ads_dlist_t* list, void* where);
+void ads_dlist_pop_back(ads_dlist_t* list, void* where);
+
+void ads_dlist_erase(ads_dlist_t* list, ads_dlist_data_t* iter);
 
 /** returns true, if list is empty */
 bool ads_dlist_empty(ads_dlist_t* list);
 
 /** clear list if data is pod */
-void ads_dlist_clear_base(ads_dlist_t* lst);
+void ads_dlist_clear_ref(ads_dlist_t* lst, void (*remover)(void*));
 
 /**
- * destroys any list content using remover, and list itself;
+ * destroys any list content and list itself;
  * sets list value to NULL
  */
 void ads_dlist_destroy(ads_dlist_t** list);
 
-#define ads_dlist_push_back_value(lst, type, el)                          \
-    *(type*) ads_dlist_push_back(lst, NULL, sizeof(type)) = el
+#define ads_dlist_create(type) ads_dlist_create_ref(sizeof(type))
 
-#define ads_dlist_push_front_value(lst, type, el)                         \
-    *(type*) ads_dlist_push_front(lst, NULL, sizeof(type)) = el
+#define ads_dlist_push_back_value(lst, el)                          \
+    *(__typeof__(el)*) ads_dlist_push_back(lst, NULL) = el
+
+#define ads_dlist_push_front_value(lst, el)                         \
+    *(__typeof__(el)*) ads_dlist_push_front(lst, NULL) = el
 
 #define ads_dlist_for(lst, iter)                                          \
     for (ads_dlist_data_t* iter = (lst)->front; iter != NULL;             \
@@ -274,5 +276,16 @@ void ads_dlist_destroy(ads_dlist_t** list);
          iter = iter->prev)
 
 #define ads_dlist_val(iter, type) (*(type*) &(iter->value))
+
+#define ads_dlist_clear_macro_1(lst)            ads_dlist_clear_ref(lst, NULL)
+#define ads_dlist_clear_macro_2(lst, remover)   ads_dlist_clear_ref(lst, remover)
+#define ads_dlist_clear_macro(_1, _2, NAME, ...) NAME
+
+#define ads_dlist_clear(...)                                               \
+    ads_dlist_clear_macro(__VA_ARGS__,                                     \
+                         ads_dlist_clear_macro_2,                          \
+                         ads_dlist_clear_macro_1)(__VA_ARGS__)
+
+#define ads_dlist_auto ads_dlist_t* ads_auto_cleanup(ads_dlist_destroy)
 
 /**@}*/

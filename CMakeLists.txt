@@ -9,16 +9,18 @@ set(adsc_lib_install "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation dire
 set(adsc_inc_install "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
 
 set(
-    adsc_headers 
+    adsc_headers
     "include/adsc_base.h"
     "include/adsc_alloc.h"
     "include/adsc_lists.h"
     "include/adsc.h"
 )
 set(
-    adsc_sources 
+    adsc_sources
     source/lists.c
     source/alloc.c
+    ${adsc_headers}
+    "include/adsc_internal.h"
 )
 
 # ------------ tuning compiler ------------
@@ -54,7 +56,7 @@ set_target_properties(adsc PROPERTIES
 add_library(adscd ${adsc_sources})
 target_compile_options(adscd PRIVATE ${adsc_compile_flags_debug})
 target_include_directories(adscd PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set_target_properties(adscd PROPERTIES 
+set_target_properties(adscd PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
 )
@@ -70,6 +72,6 @@ install(
     ARCHIVE DESTINATION "${adsc_lib_install}"
 )
 install(
-    FILES ${adsc_headers} 
+    FILES ${adsc_headers}
     DESTINATION "${adsc_inc_install}"
 )

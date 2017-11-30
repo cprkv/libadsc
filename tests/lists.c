@@ -437,7 +437,7 @@ enum test_result_t list_nested()
 
 enum test_result_t dlist_create()
 {
-    ads_dlist_t* lst = ads_dlist_create();
+    ads_dlist_t* lst = ads_dlist_create(int);
     test_assert(lst != NULL);
     test_assert(ads_dlist_empty(lst));
     test_assert(lst->size == 0);
@@ -450,14 +450,14 @@ enum test_result_t dlist_create()
 
 enum test_result_t dlist_push_top_1()
 {
-    ads_dlist_t* lst = ads_dlist_create();
+    ads_dlist_t* lst = ads_dlist_create(int*);
     int* ptr = malloc(sizeof(int));
     *ptr = 228;
 
     test_assert(ads_dlist_empty(lst));
     test_assert(lst->size == 0);
 
-    ads_dlist_push_back(lst, &ptr, sizeof(int*));
+    ads_dlist_push_back(lst, &ptr);
     test_assert(ads_dlist_top_front(lst) != NULL);
     test_assert(ads_dlist_top_back(lst) == ads_dlist_top_front(lst));
     test_assert(lst->size == 1);
@@ -468,7 +468,7 @@ enum test_result_t dlist_push_top_1()
     test_assert(lst->size == 1);
 
     int* back = NULL;
-    ads_dlist_pop_back(lst, &back, sizeof(int*));
+    ads_dlist_pop_back(lst, &back);
     test_assert(lst->size == 0);
     test_assert(ads_dlist_top_front(lst) == NULL);
     test_assert(ads_dlist_empty(lst));
@@ -482,53 +482,53 @@ enum test_result_t dlist_push_top_1()
 
 enum test_result_t dlist_push_top_2()
 {
-    ads_dlist_t* lst = ads_dlist_create();
+    ads_dlist_auto lst = ads_dlist_create(int);
     int ptr;
 
     test_assert(ads_dlist_empty(lst));
     test_assert((int*) ads_dlist_top_front(lst) == NULL);
 
-    ads_dlist_push_back_value(lst, int, 4);
+    ads_dlist_push_back_value(lst, 4);
     test_assert(!ads_dlist_empty(lst));
     test_assert(*(int*) ads_dlist_top_back(lst) == 4);
     test_assert(*(int*) ads_dlist_top_front(lst) == 4);
 
-    ads_dlist_push_back_value(lst, int, 8);
+    ads_dlist_push_back_value(lst, 8);
     test_assert(*(int*) ads_dlist_top_back(lst) == 8);
     test_assert(*(int*) ads_dlist_top_front(lst) == 4);
 
-    ads_dlist_push_back_value(lst, int, 7);
+    ads_dlist_push_back_value(lst, 7);
     test_assert(*(int*) ads_dlist_top_back(lst) == 7);
     test_assert(*(int*) ads_dlist_top_front(lst) == 4);
 
-    ads_dlist_pop_back(lst, &ptr, sizeof(int));
+    ads_dlist_pop_back(lst, &ptr);
     test_assert(!ads_dlist_empty(lst));
     test_assert(ptr == 7);
     test_assert(*(int*) ads_dlist_top_back(lst) == 8);
     test_assert(*(int*) ads_dlist_top_front(lst) == 4);
 
-    ads_dlist_pop_back(lst, &ptr, sizeof(int));
+    ads_dlist_pop_back(lst, &ptr);
     test_assert(!ads_dlist_empty(lst));
     test_assert(ptr == 8);
     test_assert(*(int*) ads_dlist_top_back(lst) == 4);
     test_assert(*(int*) ads_dlist_top_front(lst) == 4);
 
-    ads_dlist_pop_back(lst, &ptr, sizeof(int));
+    ads_dlist_pop_back(lst, &ptr);
     test_assert(ads_dlist_empty(lst));
     test_assert(ptr == 4);
     test_assert((int*) ads_dlist_top_back(lst) == NULL);
 
-    ads_dlist_push_front_value(lst, int, 3);
+    ads_dlist_push_front_value(lst, 3);
     test_assert(!ads_dlist_empty(lst));
     test_assert(*(int*) ads_dlist_top_front(lst) == 3);
     test_assert(*(int*) ads_dlist_top_back(lst) == 3);
 
-    ads_dlist_push_front_value(lst, int, 2);
+    ads_dlist_push_front_value(lst, 2);
     test_assert(!ads_dlist_empty(lst));
     test_assert(*(int*) ads_dlist_top_front(lst) == 2);
     test_assert(*(int*) ads_dlist_top_back(lst) == 3);
 
-    ads_dlist_push_back_value(lst, int, 4);
+    ads_dlist_push_back_value(lst, 4);
     test_assert(!ads_dlist_empty(lst));
     test_assert(*(int*) ads_dlist_top_front(lst) == 2);
     test_assert(*(int*) ads_dlist_top_back(lst) == 4);
@@ -579,8 +579,8 @@ enum test_result_t dlist_push_top_2()
         i++;
     }
 
-    ads_dlist_destroy(&lst);
-    test_assert(lst == NULL);
+    //ads_dlist_destroy(&lst);
+    //test_assert(lst == NULL);
 
     return TEST_RESULT_OK;
 }
@@ -588,14 +588,14 @@ enum test_result_t dlist_push_top_2()
 enum test_result_t dlist_static()
 {
     ads_dlist_t lst;
-    ads_dlist_init(&lst);
+    ads_dlist_init(&lst, sizeof(int));
 
-    ads_dlist_push_front_value(&lst, int, 4);
-    ads_dlist_push_back_value(&lst, int, 6);
-    ads_dlist_push_front_value(&lst, int, 2);
-    ads_dlist_push_back_value(&lst, int, 8);
-    ads_dlist_push_front_value(&lst, int, 0);
-    ads_dlist_push_back_value(&lst, int, 10);
+    ads_dlist_push_front_value(&lst, 4);
+    ads_dlist_push_back_value(&lst, 6);
+    ads_dlist_push_front_value(&lst, 2);
+    ads_dlist_push_back_value(&lst, 8);
+    ads_dlist_push_front_value(&lst, 0);
+    ads_dlist_push_back_value(&lst, 10);
 
     test_assert(lst.size == 6);
     int i = 0;
@@ -608,7 +608,7 @@ enum test_result_t dlist_static()
 
     test_assert(i == 6);
 
-    ads_dlist_clear_base(&lst);
+    ads_dlist_clear(&lst);
     test_assert(lst.size == 0);
     test_assert(ads_dlist_empty(&lst));
 
