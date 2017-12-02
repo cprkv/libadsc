@@ -20,7 +20,8 @@ void test_run_all(const char* st, ...)
                (res == TEST_RESULT_OK ? "OK" : "FAILED"));
 
         test_desc = va_arg(args, const char*);
-        if (!test_desc) break;
+        if (!test_desc)
+            break;
         test = va_arg(args, test_t);
     }
 
@@ -50,9 +51,9 @@ void test_run_rtf(const char* st, ...)
 
         test_desc = va_arg(args, const char*);
 
-        if (!test_desc) 
+        if (!test_desc)
             break;
-        
+
         test = va_arg(args, test_t);
     }
 

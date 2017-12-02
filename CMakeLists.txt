@@ -13,12 +13,15 @@ set(
     "include/adsc_base.h"
     "include/adsc_alloc.h"
     "include/adsc_lists.h"
+    "include/adsc_vec.h"
     "include/adsc.h"
 )
 set(
     adsc_sources
     source/lists.c
     source/alloc.c
+    source/vec.c
+    source/algo.c
     ${adsc_headers}
     "include/adsc_internal.h"
 )

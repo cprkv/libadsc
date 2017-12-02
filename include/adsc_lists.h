@@ -30,8 +30,6 @@ typedef struct
     size_t val_size;
 } ads_list_t;
 
-#define ads_list_create(type) ads_list_create_ref(sizeof(type))
-
 /**
  * @brief Creates linked list with default allocator (on heap).
  * @note You should use #ads_list_destroy when list is not needed.
@@ -101,6 +99,8 @@ void ads_list_clear_ref(ads_list_t* lst, void (*remover)(void*));
  * @note   Makes list not able to reuse (sets @c *list to @c NULL).
  */
 void ads_list_destroy(ads_list_t** list);
+
+#define ads_list_create(type) ads_list_create_ref(sizeof(type))
 
 /**
  * @brief Iterates with apply block of operations to iterator element.
@@ -179,10 +179,8 @@ void ads_list_destroy(ads_list_t** list);
 /**
  * Example for @c ads_list_t*:
  * @code
- *   ads_list_push_value(lst, int, 228);
- *   ads_list_push_value(lst, point2f_t, { 3.4f, 0.3f });
- *   ...
- *   ads_list_destroy(lst, free);
+ *   ads_list_push_value(lst, 228);
+ *   ads_list_push_value(lst, point2f{ 3.4f, 0.3f });
  * @endcode
  */
 #define ads_list_push_value(lst, el)                                      \

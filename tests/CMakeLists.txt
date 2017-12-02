@@ -7,6 +7,7 @@ add_subdirectory(.. adsc)
 set(tests_sources 
     lists.c
     alloc.c
+    vec.c
     test_suite.c
     main.c
 )

@@ -1,5 +1,6 @@
 ---
 ColumnLimit: '75'
+PenaltyReturnTypeOnItsOwnLine: '50000'
 IndentWidth: '4'
 IndentWrappedFunctionNames: 'false'
 MaxEmptyLinesToKeep: '2'
@@ -13,6 +14,8 @@ BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortFunctionsOnASingleLine: 'false'
 AllowShortBlocksOnASingleLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AlwaysBreakAfterReturnType: 'None'
 PointerAlignment: 'Left'
 BinPackArguments: 'false'
 BinPackParameters: 'false'

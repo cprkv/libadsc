@@ -19,6 +19,11 @@ enum test_result_t dlist_push_top_2();
 enum test_result_t dlist_static();
 enum test_result_t dlist_erase();
 
+// vec.c
+enum test_result_t vec_create();
+enum test_result_t vec_resize();
+enum test_result_t vec_elem();
+
 // alloc.c
 enum test_result_t alloc_pool_create();
 enum test_result_t alloc_pool_create_int();
@@ -44,6 +49,10 @@ int main()
                  test_add(dlist_push_top_2),
                  test_add(dlist_static),
                  test_add(dlist_erase),
+
+                 test_add(vec_create),
+                 test_add(vec_resize),
+                 test_add(vec_elem),
 
                  test_add(alloc_pool_create),
                  test_add(alloc_pool_create_int),
