@@ -252,7 +252,40 @@ void ads_dlist_pop_back(ads_dlist_t* list, void* where)
 
 void ads_dlist_erase(ads_dlist_t* list, ads_dlist_data_t* iter)
 {
+    ads_assert(list && iter);
+    if (!list->front)
+        return;
 
+    auto_t is_first = list->front == iter;
+    auto_t is_last = list->back == iter;
+
+    if (is_first || is_last)
+    {
+        if (is_first && is_last)
+        {
+            list->front = list->back = NULL;
+        }
+        else if (is_first)
+        {
+            list->front = iter->next;
+            list->front->prev = NULL;
+        }
+        else // is_last
+        {
+            list->back = iter->prev;
+            list->back->next = NULL;
+        }
+    }
+    else
+    {
+        ads_dlist_data_t* p = iter->prev;
+        ads_dlist_data_t* n = iter->next;
+        p->next = n;
+        n->prev = p;
+    }
+
+    ads_free(iter);
+    list->size--;
 }
 
 bool ads_dlist_empty(ads_dlist_t* list)

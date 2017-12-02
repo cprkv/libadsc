@@ -261,10 +261,10 @@ void ads_dlist_destroy(ads_dlist_t** list);
 
 #define ads_dlist_create(type) ads_dlist_create_ref(sizeof(type))
 
-#define ads_dlist_push_back_value(lst, el)                          \
+#define ads_dlist_push_back_value(lst, el)                                \
     *(__typeof__(el)*) ads_dlist_push_back(lst, NULL) = el
 
-#define ads_dlist_push_front_value(lst, el)                         \
+#define ads_dlist_push_front_value(lst, el)                               \
     *(__typeof__(el)*) ads_dlist_push_front(lst, NULL) = el
 
 #define ads_dlist_for(lst, iter)                                          \
@@ -277,15 +277,28 @@ void ads_dlist_destroy(ads_dlist_t** list);
 
 #define ads_dlist_val(iter, type) (*(type*) &(iter->value))
 
-#define ads_dlist_clear_macro_1(lst)            ads_dlist_clear_ref(lst, NULL)
-#define ads_dlist_clear_macro_2(lst, remover)   ads_dlist_clear_ref(lst, remover)
+#define ads_dlist_clear_macro_1(lst) ads_dlist_clear_ref(lst, NULL)
+#define ads_dlist_clear_macro_2(lst, remover)                             \
+    ads_dlist_clear_ref(lst, remover)
 #define ads_dlist_clear_macro(_1, _2, NAME, ...) NAME
 
-#define ads_dlist_clear(...)                                               \
-    ads_dlist_clear_macro(__VA_ARGS__,                                     \
-                         ads_dlist_clear_macro_2,                          \
-                         ads_dlist_clear_macro_1)(__VA_ARGS__)
+#define ads_dlist_clear(...)                                              \
+    ads_dlist_clear_macro(__VA_ARGS__,                                    \
+                          ads_dlist_clear_macro_2,                        \
+                          ads_dlist_clear_macro_1)(__VA_ARGS__)
 
 #define ads_dlist_auto ads_dlist_t* ads_auto_cleanup(ads_dlist_destroy)
+
+#define ads_dlist_erase_if(lst, type, predicate)                          \
+    {                                                                     \
+        for (ads_dlist_data_t* __list_iter = lst->front;                  \
+             __list_iter != NULL;)                                        \
+        {                                                                 \
+            ads_dlist_data_t* __list_iter_next = __list_iter->next;       \
+            if (predicate(ads_dlist_val(__list_iter, type)))              \
+                ads_dlist_erase(lst, __list_iter);                        \
+            __list_iter = __list_iter_next;                               \
+        }                                                                 \
+    }
 
 /**@}*/

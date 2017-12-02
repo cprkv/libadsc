@@ -17,3 +17,5 @@
 #else
 #define ads_auto_cleanup(x) error-no-auto-cleanup
 #endif
+
+#define auto_t __auto_type

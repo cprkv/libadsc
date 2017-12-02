@@ -60,9 +60,9 @@
 
 #ifdef ads_compiler_gnuc
 
-#define ads_lambda(l_ret_type, l_arguments, l_body)                       \
+#define ads_lambda(l_ret_type, l_body)                                    \
     ({                                                                    \
-        l_ret_type l_anonymous_functions_name l_arguments l_body;         \
+        l_ret_type l_anonymous_functions_name l_body;                     \
         &l_anonymous_functions_name;                                      \
     })
 

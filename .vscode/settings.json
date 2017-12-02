@@ -8,5 +8,6 @@
         "system_error": "c",
         "type_traits": "c",
         "adsc_internal.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -17,6 +17,7 @@ enum test_result_t dlist_create();
 enum test_result_t dlist_push_top_1();
 enum test_result_t dlist_push_top_2();
 enum test_result_t dlist_static();
+enum test_result_t dlist_erase();
 
 // alloc.c
 enum test_result_t alloc_pool_create();
@@ -42,6 +43,7 @@ int main()
                  test_add(dlist_push_top_1),
                  test_add(dlist_push_top_2),
                  test_add(dlist_static),
+                 test_add(dlist_erase),
 
                  test_add(alloc_pool_create),
                  test_add(alloc_pool_create_int),
