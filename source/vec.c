@@ -1,8 +1,7 @@
-#include <adsc_vec.h>
 #include <adsc_internal.h>
+#include <adsc_vec.h>
 
-ads_vec_t*
-ads_vec_create_ref(size_t val_size, size_t size)
+ads_vec_t* ads_vec_create_ref(size_t val_size, size_t size)
 {
     ads_alloc_struct(vec, ads_vec_t);
     ads_assert(vec);
@@ -10,9 +9,7 @@ ads_vec_create_ref(size_t val_size, size_t size)
     return vec;
 }
 
-void ads_vec_init(ads_vec_t* vec,
-                  size_t val_size,
-                  size_t size)
+void ads_vec_init(ads_vec_t* vec, size_t val_size, size_t size)
 {
     ads_assert(vec && val_size);
     vec->capacity = ads_fast_close_2(size);
@@ -25,9 +22,9 @@ void ads_vec_clear_ref(ads_vec_t* vec, void (*remover)(void*))
 {
     ads_assert(vec);
 
-    for(size_t i = 0; i < vec->size; i++)
+    for (size_t i = 0; i < vec->size; i++)
         remover(ads_vec_ptr(vec, i));
-        
+
     ads_vec_resize(vec, 0);
 }
 
