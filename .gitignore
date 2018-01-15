@@ -5,6 +5,7 @@
 *.obj
 *.elf
 
+.vscode
 .vscode/*
 .directory
 
