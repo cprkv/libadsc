@@ -4,7 +4,7 @@ project(adscd C)
 
 # ------------ cmake and input configuration ------------
 
-set(adsc_bin_install "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
+set(adsc_bin_install "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for executables")
 set(adsc_lib_install "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
 set(adsc_inc_install "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
 
@@ -53,16 +53,16 @@ add_library(adsc ${adsc_sources})
 target_compile_options(adsc PRIVATE ${adsc_compile_flags_release})
 target_include_directories(adsc PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set_target_properties(adsc PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
 )
 
 add_library(adscd ${adsc_sources})
 target_compile_options(adscd PRIVATE ${adsc_compile_flags_debug})
 target_include_directories(adscd PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set_target_properties(adscd PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
 )
 
 install(

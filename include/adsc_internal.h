@@ -1,4 +1,5 @@
 #pragma once
+#include <adsc_alloc.h>
 #include <assert.h>
 
 /**
@@ -7,8 +8,11 @@
  * Desc:       internal header
  */
 
-#define ads_alloc_struct(var, type) type* var = malloc(sizeof(type))
+#define ads_malloc(size) malloc(size)
+#define ads_realloc(ptr, size) realloc(ptr, size)
 #define ads_free(ptr) free(ptr)
+
+#define ads_alloc_struct(var, type) type* var = ads_malloc(sizeof(type))
 
 #ifdef DEBUG
 #define ads_assert assert

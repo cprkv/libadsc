@@ -22,7 +22,7 @@ ads_list_t* ads_list_create_ref(size_t val_size)
 void* ads_list_push(ads_list_t* list, void* value)
 {
     ads_assert(list);
-    ads_list_data_t* elem = malloc(sizeof(void*) + list->val_size);
+    ads_list_data_t* elem = ads_malloc(sizeof(void*) + list->val_size);
     ads_assert(elem);
     elem->next = list->head;
 
@@ -153,7 +153,7 @@ void ads_dlist_init(ads_dlist_t* list, size_t val_size)
 void* ads_dlist_push_back(ads_dlist_t* list, void* value)
 {
     ads_assert(list);
-    ads_dlist_data_t* elem = malloc(sizeof(void*) + sizeof(void*) + list->val_size);
+    ads_dlist_data_t* elem = ads_malloc(sizeof(void*) + sizeof(void*) + list->val_size);
     ads_assert(elem);
     elem->prev = list->back;
     elem->next = NULL;
@@ -175,7 +175,7 @@ void* ads_dlist_push_back(ads_dlist_t* list, void* value)
 void* ads_dlist_push_front(ads_dlist_t* list, void* value)
 {
     ads_assert(list);
-    ads_dlist_data_t* elem = malloc(sizeof(void*) + sizeof(void*) + list->val_size);
+    ads_dlist_data_t* elem = ads_malloc(sizeof(void*) + sizeof(void*) + list->val_size);
     ads_assert(elem);
     elem->prev = NULL;
     elem->next = list->front;

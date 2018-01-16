@@ -61,7 +61,7 @@ void ads_alloc_pool_init(ads_alloc_pool_t* self,
     self->object_size = ads_max(object_size, sizeof(void*)); // in bytes
     self->size = 0; // object count
     self->capacity = capacity;
-    self->pool = malloc(self->capacity * self->object_size);
+    self->pool = ads_malloc(self->capacity * self->object_size);
     self->start = self->pool;
 
     pool_init_blocks(self->start, self->capacity, self->object_size);
@@ -73,7 +73,7 @@ void ads_alloc_pool_clear(ads_alloc_pool_t* self)
 
     if (self->pool)
     {
-        free(self->pool);
+        ads_free(self->pool);
         self->size = 0;
         self->capacity = 0;
         self->pool = NULL;
@@ -107,7 +107,7 @@ void ads_alloc_pool_list_init(ads_alloc_pool_list_t* self,
                               size_t capacity)
 {
     ads_assert(self);
-    self->list = malloc(sizeof(ads_alloc_pool_list_el_t));
+    self->list = ads_malloc(sizeof(ads_alloc_pool_list_el_t));
     self->list->next = NULL;
     ads_alloc_pool_init(&self->list->poll, object_size, capacity);
 }
@@ -124,5 +124,5 @@ void ads_alloc_pool_list_destroy(ads_alloc_pool_list_t** self)
 
 void ads_free_impl(void** ptr)
 {
-    free(*ptr);
+    ads_free(*ptr);
 }
