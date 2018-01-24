@@ -25,10 +25,6 @@ enum test_result_t
         return TEST_RESULT_FAILED;                                        \
     }
 
-
-// #define test_assert(cond) if (!(cond)) { printf("test assertion (" #cond
-// ") failed on " " : "); return TEST_RESULT_FAILED; }
-
 typedef enum test_result_t (*test_t)(void);
 
 void test_run_all(const char* st, ...);
