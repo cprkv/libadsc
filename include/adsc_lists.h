@@ -112,7 +112,7 @@ void ads_list_destroy(ads_list_t** list);
  *   float sum = 0.0f;
  *   ads_list_for(lst, it)
  *   {
- *       sum += ads_list_val(lst, it, float);
+ *     sum += ads_list_val(lst, it, float);
  *   }
  * @endcode
  */
@@ -135,8 +135,8 @@ void ads_list_destroy(ads_list_t** list);
  *   ...
  *   int sum = 0;
  *   ads_list_for_each(
- *       lst, it,
- *       sum += ads_list_val(it, int)
+ *     lst, it,
+ *     sum += ads_list_val(it, int)
  *   );
  * @endcode
  */
@@ -171,8 +171,7 @@ void ads_list_destroy(ads_list_t** list);
  * @endcode
  */
 #define ads_list_clear(...)                                               \
-  ads_list_clear_macro(__VA_ARGS__,                                       \
-                       ads_list_clear_macro_2,                            \
+  ads_list_clear_macro(__VA_ARGS__, ads_list_clear_macro_2,               \
                        ads_list_clear_macro_1)(__VA_ARGS__)
 
 /**
@@ -191,10 +190,9 @@ void ads_list_destroy(ads_list_t** list);
  * Example usage:
  * @code
  *  {
- *      ads_list_auto() lst = ads_list_create();
- *      ads_list_push_value(lst, int, 228);
- *      ...
- *
+ *    ads_list_auto() lst = ads_list_create();
+ *    ads_list_push_value(lst, int, 228);
+ *    ...
  *  }   // lst automaticly destroys here
  * @endcode
  */
@@ -280,8 +278,7 @@ void ads_dlist_destroy(ads_dlist_t** list);
 #define ads_dlist_clear_macro(_1, _2, NAME, ...) NAME
 
 #define ads_dlist_clear(...)                                              \
-  ads_dlist_clear_macro(__VA_ARGS__,                                      \
-                        ads_dlist_clear_macro_2,                          \
+  ads_dlist_clear_macro(__VA_ARGS__, ads_dlist_clear_macro_2,             \
                         ads_dlist_clear_macro_1)(__VA_ARGS__)
 
 #define ads_dlist_auto ads_dlist_t* ads_auto_cleanup(ads_dlist_destroy)

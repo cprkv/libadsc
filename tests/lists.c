@@ -228,13 +228,13 @@ enum test_result_t list_erase()
         ads_list_push_value(rmlst, it);
     }
 
-#ifdef ads_compiler_gnuc
-    auto_t rmdeleter = ads_lambda(
-        void, (void* ptr) { ads_list_erase(lst, *(void**) ptr); });
-    ads_list_clear(rmlst, rmdeleter);
-#else
-    ads_list_for(rmlst, it) ads_list_erase(lst, ads_list_val(it, void*));
-#endif
+    {
+      void rmdeleter(void* ptr)
+      {
+        ads_list_erase(lst, *(void**) ptr);
+      }
+      ads_list_clear(rmlst, rmdeleter);
+    }
   }
 
   test_assert(lst->size == 4);
@@ -268,13 +268,6 @@ enum test_result_t list_erase()
   return TEST_RESULT_OK;
 }
 
-#ifndef ads_compiler_gnuc
-static bool lst_erase_condition(int v)
-{
-  return v % 2 == 0;
-}
-#endif
-
 enum test_result_t list_erase_if()
 {
   ads_list_auto lst = ads_list_create(int);
@@ -290,13 +283,13 @@ enum test_result_t list_erase_if()
 
   test_assert(lst->size == 8);
 
-#ifndef ads_compiler_gnuc
-  ads_list_erase_if(lst, int, lst_erase_condition);
-#else
-  auto_t condition = ads_lambda(bool, (int v) { return v % 2 == 0; });
-  ads_list_erase_if(lst, int, condition);
-#endif
-
+  {
+    bool condition(int v)
+    {
+      return v % 2 == 0;
+    }
+    ads_list_erase_if(lst, int, condition);
+  }
   test_assert(lst->size == 4);
 
   int i = 0;
@@ -351,13 +344,6 @@ enum test_result_t list_contains_null()
   return TEST_RESULT_OK;
 }
 
-#ifndef ads_compiler_gnuc
-static void nested_list_clear_func(void* ptr)
-{
-  ads_list_clear(ptr);
-}
-#endif
-
 enum test_result_t list_nested()
 {
   /**
@@ -406,18 +392,20 @@ enum test_result_t list_nested()
 
   // first method to destroy nested lists
   /*
-      while (!ads_list_empty(lst))
-      {
-          ads_list_clear(ads_list_top(lst));
-          ads_list_pop(lst, NULL, 0);
-      }
+    while (!ads_list_empty(lst))
+    {
+      ads_list_clear(ads_list_top(lst));
+      ads_list_pop(lst, NULL, 0);
+    }
   */
   // but i used this method
-#ifdef ads_compiler_gnuc
-  ads_list_clear(lst, ads_lambda(void, (void* n) { ads_list_clear(n); }));
-#else
-  ads_list_clear(lst, nested_list_clear_func);
-#endif
+  {
+    void nested_list_clear_func(void* ptr)
+    {
+      ads_list_clear(ptr);
+    }
+    ads_list_clear(lst, nested_list_clear_func);
+  }
 
   ads_list_destroy(&lst);
   test_assert(lst == NULL);
@@ -607,13 +595,6 @@ enum test_result_t dlist_static()
   return TEST_RESULT_OK;
 }
 
-#ifndef ads_compiler_gnuc
-static bool dlist_erase_func(int v)
-{
-  return v % 3 == 0 || v % 3 == 1;
-}
-#endif
-
 enum test_result_t dlist_erase()
 {
   ads_dlist_auto lst = ads_dlist_create(int);
@@ -623,13 +604,9 @@ enum test_result_t dlist_erase()
 
   test_assert(lst->size == 10);
 
-#ifdef ads_compiler_gnuc
   ads_dlist_erase_if(lst, int, ads_lambda(bool, (int v) {
                        return v % 3 == 0 || v % 3 == 1;
                      }));
-#else
-  ads_dlist_erase_if(lst, int, dlist_erase_func);
-#endif
 
   int i = 0;
   ads_dlist_for_reverse(lst, it)

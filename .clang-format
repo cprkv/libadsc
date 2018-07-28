@@ -13,9 +13,9 @@ BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortFunctionsOnASingleLine: 'false'
 AllowShortBlocksOnASingleLine: 'false'
-AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
 AlwaysBreakAfterReturnType: 'None'
 PointerAlignment: 'Left'
-BinPackArguments: 'false'
-BinPackParameters: 'false'
+BinPackArguments: 'true'
+BinPackParameters: 'true'
 ...
