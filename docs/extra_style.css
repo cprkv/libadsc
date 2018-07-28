@@ -1,30 +1,30 @@
 .memtitle {
-    padding: 8px 12px;
-    font-family: monospace, fixed;
+  padding: 8px 12px;
+  font-family: monospace, fixed;
 }
 
 .memname {
-    font-family: monospace, fixed;
+  font-family: monospace, fixed;
 }
 
 .memItemLeft .memItemRight {
-    font-family: monospace, fixed;
+  font-family: monospace, fixed;
 }
 
 #titlearea {
-    width: auto !important;
-    padding: 0 0 0 10px;
+  width: auto !important;
+  padding: 0 0 0 10px;
 }
 
 #projectlogo {
-    height: 68px;
-    vertical-align: middle !important;
+  height: 68px;
+  vertical-align: middle !important;
 }
 
 #projectname {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 #projectbrief {
-    margin-top: -50px;
+  margin-top: -50px;
 }

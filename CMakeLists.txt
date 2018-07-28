@@ -10,12 +10,13 @@ set(adsc_inc_install "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation 
 
 set(
   adsc_headers
-  "include/adsc_base.h"
-  "include/adsc_alloc.h"
-  "include/adsc_lists.h"
-  "include/adsc_vec.h"
-  "include/adsc_func.h"
-  "include/adsc.h"
+  "include/ads_base.h"
+  "include/ads_alloc.h"
+  "include/ads_list.h"
+  "include/ads_dlist.h"
+  "include/ads_vec.h"
+  "include/ads_func.h"
+  "include/ads.h"
 )
 set(
   adsc_sources
@@ -24,28 +25,24 @@ set(
   source/vec.c
   source/algo.c
   ${adsc_headers}
-  "include/adsc_internal.h"
+  "include/ads_internal.h"
 )
 
 # ------------ tuning compiler ------------
-
+# remark: clang is first to check because if it is,
+#         compiler_id says that is gnu too, but it's a lie!
 if(${CMAKE_C_COMPILER_ID} MATCHES "Clang")
-  set(adsc_compiler_clang true)
-  message("ADSC> using Clang compiler")
+  message(FATAL_ERROR "adsc is not ready to use with your compiler")
 elseif(${CMAKE_C_COMPILER_ID} MATCHES "GNU")
-  set(adsc_compiler_gnu true)
-  message("ADSC> using GNU compiler")
+  message("adsc> using GNU compiler")
 else()
   message(FATAL_ERROR "ADSC is not ready to use with your compiler")
 endif()
 
-if(adsc_compiler_clang OR adsc_compiler_gnu)
-  set(adsc_compile_flags_release -std=c11 -O3 -march=native -Wall)
-  set(adsc_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
-endif()
-
-message("ADSC> debug flags   : ${adsc_compile_flags_debug}")
-message("ADSC> release flags : ${adsc_compile_flags_release}")
+set(adsc_compile_flags_release -std=c11 -O3 -march=native -Wall)
+set(adsc_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
+message("adsc> debug flags   : ${adsc_compile_flags_debug}")
+message("adsc> release flags : ${adsc_compile_flags_release}")
 
 # ------------ setting up libraries ------------
 

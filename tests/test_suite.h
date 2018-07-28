@@ -2,9 +2,8 @@
 #include <stdio.h>
 
 /**
- * File:       test_suite.h
- * Created by: kristen
- * Desc:       tests helper
+ * @file test_suite.h
+ * @brief tests helper
  */
 
 enum test_result_t
@@ -19,8 +18,7 @@ enum test_result_t
   if (!(cond))                                                            \
   {                                                                       \
     printf("   test assertion (" #cond ") failed on line %d\n   %s\n",    \
-           __LINE__,                                                      \
-           __FILE__);                                                     \
+           __LINE__, __FILE__);                                           \
     return TEST_RESULT_FAILED;                                            \
   }
 

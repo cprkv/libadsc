@@ -5,7 +5,7 @@ project(testsd C)
 add_subdirectory(.. adsc)
 
 set(tests_sources 
-  lists.c
+  list.c
   alloc.c
   vec.c
   test_suite.c
@@ -14,20 +14,8 @@ set(tests_sources
 
 # ------------ tuning compiler ------------
 
-if(${CMAKE_C_COMPILER_ID} MATCHES "Clang")
-  set(tests_compiler_clang true)
-  message("tests> using Clang compiler")
-elseif(${CMAKE_C_COMPILER_ID} MATCHES "GNU")
-  set(tests_compiler_gnu true)
-  message("tests> using GNU compiler")
-else()
-  message(FATAL_ERROR "tests is not ready to use with your compiler")
-endif()
-
-if(tests_compiler_clang OR tests_compiler_gnu)
-  set(tests_compile_flags_release -std=c11 -O3 -march=native -Wall)
-  set(tests_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
-endif()
+set(tests_compile_flags_release -std=c11 -O3 -march=native -Wall)
+set(tests_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
 
 message("tests> debug flags   : ${tests_compile_flags_debug}")
 message("tests> release flags : ${tests_compile_flags_release}")

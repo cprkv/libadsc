@@ -1,9 +1,8 @@
 #pragma once
 
 /**
- * File:       adsc.h
- * Created by: kristen
- * Desc:       functional macro
+ * @file ads_func.h
+ * @brief functional macro
  */
 
 #define ads_lambda(l_ret_type, l_body)                                    \
