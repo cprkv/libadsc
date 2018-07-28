@@ -6,11 +6,13 @@
  * @brief tests helper
  */
 
-enum test_result_t
+enum test_result
 {
   TEST_RESULT_OK,
   TEST_RESULT_FAILED,
 };
+
+#define test_decl(name) enum test_result test_func_##name() 
 
 #define test_add(name) #name, name
 
@@ -22,7 +24,6 @@ enum test_result_t
     return TEST_RESULT_FAILED;                                            \
   }
 
-typedef enum test_result_t (*test_t)(void);
+typedef enum test_result (*test_t)(void);
 
-void test_run_all(const char* st, ...);
-void test_run_rtf(const char* st, ...);
+void test_run_all(void);
