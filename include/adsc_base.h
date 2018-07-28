@@ -4,7 +4,7 @@
  * File:       adsc_base.h
  * Created by: kristen
  * Desc:       Base typedefs, macro and functions for ADSC library.
- */ 
+ */
 
 #include <math.h>
 #include <stddef.h>
@@ -21,7 +21,7 @@
 #ifdef __GNUC__
 #define ads_auto_cleanup(x) __attribute__((cleanup(x)))
 #else
-#define ads_auto_cleanup(x) error-no-auto-cleanup
+#define ads_auto_cleanup(x) error - no - auto - cleanup
 #endif
 
 #define auto_t __auto_type

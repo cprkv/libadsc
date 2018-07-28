@@ -33,33 +33,33 @@ enum test_result_t alloc_pool_reuse();
 
 int main()
 {
-    test_run_rtf(test_add(list_create),
-                 test_add(list_push_top_1),
-                 test_add(list_push_top_2),
-                 test_add(list_for_value),
-                 test_add(list_static),
-                 test_add(list_for_each),
-                 test_add(list_contains_null),
-                 test_add(list_nested),
-                 test_add(list_erase),
-                 test_add(list_erase_if),
+  test_run_rtf(test_add(list_create),
+               test_add(list_push_top_1),
+               test_add(list_push_top_2),
+               test_add(list_for_value),
+               test_add(list_static),
+               test_add(list_for_each),
+               test_add(list_contains_null),
+               test_add(list_nested),
+               test_add(list_erase),
+               test_add(list_erase_if),
 
-                 test_add(dlist_create),
-                 test_add(dlist_push_top_1),
-                 test_add(dlist_push_top_2),
-                 test_add(dlist_static),
-                 test_add(dlist_erase),
+               test_add(dlist_create),
+               test_add(dlist_push_top_1),
+               test_add(dlist_push_top_2),
+               test_add(dlist_static),
+               test_add(dlist_erase),
 
-                 test_add(vec_create),
-                 test_add(vec_resize),
-                 test_add(vec_elem),
+               test_add(vec_create),
+               test_add(vec_resize),
+               test_add(vec_elem),
 
-                 test_add(alloc_pool_create),
-                 test_add(alloc_pool_create_int),
-                 test_add(alloc_pool_custom),
-                 test_add(alloc_pool_realloc),
-                 test_add(alloc_pool_reuse),
+               test_add(alloc_pool_create),
+               test_add(alloc_pool_create_int),
+               test_add(alloc_pool_custom),
+               test_add(alloc_pool_realloc),
+               test_add(alloc_pool_reuse),
 
-                 NULL);
-    return 0;
+               NULL);
+  return 0;
 }

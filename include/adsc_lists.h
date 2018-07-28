@@ -18,16 +18,16 @@
 /** @brief Linked list data. */
 typedef struct
 {
-    void* next;
-    char value;
+  void* next;
+  char value;
 } ads_list_data_t;
 
 /** @brief Linked list header. */
 typedef struct
 {
-    ads_list_data_t* head;
-    size_t size;
-    size_t val_size;
+  ads_list_data_t* head;
+  size_t size;
+  size_t val_size;
 } ads_list_t;
 
 /**
@@ -117,8 +117,8 @@ void ads_list_destroy(ads_list_t** list);
  * @endcode
  */
 #define ads_list_for(lst, iter)                                           \
-    for (ads_list_data_t* iter = (lst)->head; iter != NULL;               \
-         iter = iter->next)
+  for (ads_list_data_t* iter = (lst)->head; iter != NULL;                 \
+       iter = iter->next)
 
 /**
  * @brief Gets referens to list value from iterator.
@@ -141,25 +141,24 @@ void ads_list_destroy(ads_list_t** list);
  * @endcode
  */
 #define ads_list_for_each(lst, iter, op)                                  \
-    for (ads_list_data_t* iter = (lst)->head; iter != NULL;               \
-         iter = iter->next)                                               \
-        op;
+  for (ads_list_data_t* iter = (lst)->head; iter != NULL;                 \
+       iter = iter->next)                                                 \
+    op;
 
 #define ads_list_erase_if(lst, type, predicate)                           \
+  {                                                                       \
+    for (ads_list_data_t* __list_iter = lst->head; __list_iter != NULL;)  \
     {                                                                     \
-        for (ads_list_data_t* __list_iter = lst->head;                    \
-             __list_iter != NULL;)                                        \
-        {                                                                 \
-            ads_list_data_t* __list_iter_next = __list_iter->next;        \
-            if (predicate(ads_list_val(__list_iter, type)))               \
-                ads_list_erase(lst, __list_iter);                         \
-            __list_iter = __list_iter_next;                               \
-        }                                                                 \
-    }
+      ads_list_data_t* __list_iter_next = __list_iter->next;              \
+      if (predicate(ads_list_val(__list_iter, type)))                     \
+        ads_list_erase(lst, __list_iter);                                 \
+      __list_iter = __list_iter_next;                                     \
+    }                                                                     \
+  }
 
 #define ads_list_clear_macro_1(lst) ads_list_clear_ref(lst, NULL)
 #define ads_list_clear_macro_2(lst, remover)                              \
-    ads_list_clear_ref(lst, remover)
+  ads_list_clear_ref(lst, remover)
 #define ads_list_clear_macro(_1, _2, NAME, ...) NAME
 
 /**
@@ -172,9 +171,9 @@ void ads_list_destroy(ads_list_t** list);
  * @endcode
  */
 #define ads_list_clear(...)                                               \
-    ads_list_clear_macro(__VA_ARGS__,                                     \
-                         ads_list_clear_macro_2,                          \
-                         ads_list_clear_macro_1)(__VA_ARGS__)
+  ads_list_clear_macro(__VA_ARGS__,                                       \
+                       ads_list_clear_macro_2,                            \
+                       ads_list_clear_macro_1)(__VA_ARGS__)
 
 /**
  * Example for @c ads_list_t*:
@@ -184,7 +183,7 @@ void ads_list_destroy(ads_list_t** list);
  * @endcode
  */
 #define ads_list_push_value(lst, el)                                      \
-    *(__typeof__(el)*) ads_list_push(lst, NULL) = el
+  *(__typeof__(el)*) ads_list_push(lst, NULL) = el
 
 /**
  * @brief Auto destroys list.
@@ -211,18 +210,18 @@ void ads_list_destroy(ads_list_t** list);
 /** dlist data */
 typedef struct
 {
-    void* prev;
-    void* next;
-    char value;
+  void* prev;
+  void* next;
+  char value;
 } ads_dlist_data_t;
 
 /** dlist header with elements from front to back */
 typedef struct
 {
-    ads_dlist_data_t* front;
-    ads_dlist_data_t* back;
-    size_t size;
-    size_t val_size;
+  ads_dlist_data_t* front;
+  ads_dlist_data_t* back;
+  size_t size;
+  size_t val_size;
 } ads_dlist_t;
 
 /** creates linked list with default allocator (on heap) */
@@ -260,43 +259,43 @@ void ads_dlist_destroy(ads_dlist_t** list);
 #define ads_dlist_create(type) ads_dlist_create_ref(sizeof(type))
 
 #define ads_dlist_push_back_value(lst, el)                                \
-    *(__typeof__(el)*) ads_dlist_push_back(lst, NULL) = el
+  *(__typeof__(el)*) ads_dlist_push_back(lst, NULL) = el
 
 #define ads_dlist_push_front_value(lst, el)                               \
-    *(__typeof__(el)*) ads_dlist_push_front(lst, NULL) = el
+  *(__typeof__(el)*) ads_dlist_push_front(lst, NULL) = el
 
 #define ads_dlist_for(lst, iter)                                          \
-    for (ads_dlist_data_t* iter = (lst)->front; iter != NULL;             \
-         iter = iter->next)
+  for (ads_dlist_data_t* iter = (lst)->front; iter != NULL;               \
+       iter = iter->next)
 
 #define ads_dlist_for_reverse(lst, iter)                                  \
-    for (ads_dlist_data_t* iter = (lst)->back; iter != NULL;              \
-         iter = iter->prev)
+  for (ads_dlist_data_t* iter = (lst)->back; iter != NULL;                \
+       iter = iter->prev)
 
 #define ads_dlist_val(iter, type) (*(type*) &(iter->value))
 
 #define ads_dlist_clear_macro_1(lst) ads_dlist_clear_ref(lst, NULL)
 #define ads_dlist_clear_macro_2(lst, remover)                             \
-    ads_dlist_clear_ref(lst, remover)
+  ads_dlist_clear_ref(lst, remover)
 #define ads_dlist_clear_macro(_1, _2, NAME, ...) NAME
 
 #define ads_dlist_clear(...)                                              \
-    ads_dlist_clear_macro(__VA_ARGS__,                                    \
-                          ads_dlist_clear_macro_2,                        \
-                          ads_dlist_clear_macro_1)(__VA_ARGS__)
+  ads_dlist_clear_macro(__VA_ARGS__,                                      \
+                        ads_dlist_clear_macro_2,                          \
+                        ads_dlist_clear_macro_1)(__VA_ARGS__)
 
 #define ads_dlist_auto ads_dlist_t* ads_auto_cleanup(ads_dlist_destroy)
 
 #define ads_dlist_erase_if(lst, type, predicate)                          \
+  {                                                                       \
+    for (ads_dlist_data_t* __list_iter = lst->front;                      \
+         __list_iter != NULL;)                                            \
     {                                                                     \
-        for (ads_dlist_data_t* __list_iter = lst->front;                  \
-             __list_iter != NULL;)                                        \
-        {                                                                 \
-            ads_dlist_data_t* __list_iter_next = __list_iter->next;       \
-            if (predicate(ads_dlist_val(__list_iter, type)))              \
-                ads_dlist_erase(lst, __list_iter);                        \
-            __list_iter = __list_iter_next;                               \
-        }                                                                 \
-    }
+      ads_dlist_data_t* __list_iter_next = __list_iter->next;             \
+      if (predicate(ads_dlist_val(__list_iter, type)))                    \
+        ads_dlist_erase(lst, __list_iter);                                \
+      __list_iter = __list_iter_next;                                     \
+    }                                                                     \
+  }
 
 /**@}*/

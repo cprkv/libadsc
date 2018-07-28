@@ -1,6 +1,6 @@
 #pragma once
-#include <stddef.h>
 #include <adsc_base.h>
+#include <stddef.h>
 
 /**
  * File:       adsc_lists.h
@@ -16,15 +16,15 @@
 
 typedef struct
 {
-    void* (*alloc)(void* self);
-    void (*dealloc)(void* self, void* ptr);
+  void* (*alloc)(void* self);
+  void (*dealloc)(void* self, void* ptr);
 
-    // private
-    size_t object_size;
-    size_t size;
-    size_t capacity;
-    void* pool;
-    void* start;
+  // private
+  size_t object_size;
+  size_t size;
+  size_t capacity;
+  void* pool;
+  void* start;
 
 } ads_alloc_pool_t;
 
@@ -47,15 +47,15 @@ void ads_alloc_pool_destroy(ads_alloc_pool_t** self);
 
 typedef struct
 {
-    ads_alloc_pool_t poll;
-    void* next;
+  ads_alloc_pool_t poll;
+  void* next;
 } ads_alloc_pool_list_el_t;
 
 typedef struct
 {
-    void* (*alloc)(void* self);
-    void (*dealloc)(void* self, void* ptr);
-    ads_alloc_pool_list_el_t* list;
+  void* (*alloc)(void* self);
+  void (*dealloc)(void* self, void* ptr);
+  ads_alloc_pool_list_el_t* list;
 } ads_alloc_pool_list_t;
 
 ads_alloc_pool_list_t* ads_alloc_pool_list_create(size_t object_size,
