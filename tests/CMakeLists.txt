@@ -14,8 +14,8 @@ set(tests_sources
 
 # ------------ tuning compiler ------------
 
-set(tests_compile_flags_release -std=c11 -O3 -march=native -Wall)
-set(tests_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
+set(tests_compile_flags_release -std=gnu11 -O3 -march=native -Wall)
+set(tests_compile_flags_debug   -std=gnu11 -O0 -g -Wall -DDEBUG)
 
 message("tests> debug flags   : ${tests_compile_flags_debug}")
 message("tests> release flags : ${tests_compile_flags_release}")

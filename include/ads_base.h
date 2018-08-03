@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #define ads_max(a, b) ((a) > (b) ? (a) : (b))
 #define ads_min(a, b) ((a) < (b) ? (a) : (b))

@@ -39,8 +39,8 @@ else()
   message(FATAL_ERROR "ADSC is not ready to use with your compiler")
 endif()
 
-set(adsc_compile_flags_release -std=c11 -O3 -march=native -Wall)
-set(adsc_compile_flags_debug   -std=c11 -O0 -g -Wall -DDEBUG)
+set(adsc_compile_flags_release -std=gnu11 -O3 -march=native -Wall)
+set(adsc_compile_flags_debug   -std=gnu11 -O0 -g -Wall -DDEBUG)
 message("adsc> debug flags   : ${adsc_compile_flags_debug}")
 message("adsc> release flags : ${adsc_compile_flags_release}")
 
