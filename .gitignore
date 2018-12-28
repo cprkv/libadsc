@@ -22,6 +22,8 @@
 build/*
 !build/.gitkeep
 
+bin/*
+
 tests/build/*
 tests/bin/*
 !tests/build/.gitkeep
@@ -50,3 +52,7 @@ docs/*
 !docs/ads_logo.png
 !docs/config.conf
 !docs/extra_style.css
+
+# clion
+cmake-build*
+.idea

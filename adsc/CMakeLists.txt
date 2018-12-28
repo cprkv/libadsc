@@ -1,19 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
-project(tests CXX)
+project(adsc C)
 
 ############################# options #############################
 
-set(
-  INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
 file(
   GLOB_RECURSE SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
   ${CMAKE_CURRENT_SOURCE_DIR}/source/*.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 )
-set(LIBS adsc)
+
+set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(LIBS)
 
 ############################## target ##############################
 
-setup_target("exe")
+setup_target("lib")
