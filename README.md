@@ -8,13 +8,30 @@ For more information about API you can see:
  * *examples* (not ready)
  * API docs (in the `docs` folder)
 
+## Dependencies
+ * Criterion
+```
+sudo add-apt-repository ppa:snaipewastaken/ppa
+sudo apt-get update
+sudo apt-get install criterion-dev
+```
+ * GCC (as compiler)
+
+## Build
+
+```
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j4
+```
+
+Output binary files are located in `<repository-root>/bin`.
+
 ## Tests
 
-To run tests you need to execute shell comands:
- * `cd tests/build`
- * `cmake ..`
- * `make`
- * `../bin/tests`
+To run tests you need to:
+ * build solution
+ * run `./bin/tests`
 
 If some tests is failed, then libadsc is not ready to use in your project.
 
@@ -23,11 +40,10 @@ If some tests is failed, then libadsc is not ready to use in your project.
 **Attention:**  
 Before install you should run tests. Otherwise, all the things happend is only on your own responsibility.
 
-To install adsc you need to execute shell comands:
- * `cd build`
- * `cmake .. -DCMAKE_BUILD_TYPE=Release`
- * `make -j4`
- * `sudo make install`
+To install adsc you need to:
+ * build solution
+ * run `cd build && sudo make install`
+```
 
 ## Docs
 
@@ -45,4 +61,4 @@ In most cases you will need to open tab **Modules**. All usefull information wil
  * Just for fun - you could count lines of library code using:  
     `cloc tests source include --force-lang=C,h --include-lang=C`  
    Or do it without tests:  
-    `cloc source include --force-lang=C,h --include-lang=C`  
+    `cloc source include --force-lang=C,h --include-lang=C`

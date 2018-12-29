@@ -1,11 +1,15 @@
 function(setup_target type)
-  if (type STREQUAL "exe")
+  if(NOT CMAKE_COMPILER_IS_GNUCC)
+    message(FATAL_ERROR "not GNU compilers are not supported yet by libadsc")
+  endif()
+
+  if(type STREQUAL "exe")
     add_executable(${PROJECT_NAME} ${SOURCES})
-  elseif (type STREQUAL "lib")
+  elseif(type STREQUAL "lib")
     add_library(${PROJECT_NAME} STATIC ${SOURCES})
-  else ()
+  else()
     message(FATAL_ERROR "unknown target type: '${type}'")
-  endif ()
+  endif()
 
   target_include_directories(
     ${PROJECT_NAME} PUBLIC
@@ -17,9 +21,8 @@ function(setup_target type)
     ${LIBS}
   )
 
-  if (NOT CMAKE_COMPILER_IS_GNUCC)
-    message(FATAL_ERROR "not GNU compilers are not supported yet by libadsc")
-  endif ()
+  message("[${PROJECT_NAME}] libraries: ${LIBS}")
+  message("[${PROJECT_NAME}] includes: ${INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}")
 
   set(OUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../bin)
 
