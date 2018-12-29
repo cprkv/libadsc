@@ -44,7 +44,6 @@ Before install you should run tests. Otherwise, all the things happend is only o
 To install adsc you need to:
  * build solution
  * run `cd build && sudo make install`
-```
 
 ## Docs
 
