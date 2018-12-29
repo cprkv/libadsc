@@ -9,11 +9,12 @@ For more information about API you can see:
  * API docs (in the `docs` folder)
 
 ## Dependencies
+ * Conan
  * Criterion
 ```
-sudo add-apt-repository ppa:snaipewastaken/ppa
-sudo apt-get update
-sudo apt-get install criterion-dev
+conan remote add atolab https://api.bintray.com/conan/atolab/public-conan
+mkdir obj && cd obj
+conan install .. --build=missing
 ```
  * GCC (as compiler)
 

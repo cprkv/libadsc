@@ -1,3 +1,13 @@
+set(OBJ_DEFINED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/obj")
+set(OBJ_DIR "${OBJ_DEFINED_DIR}" CACHE STRING "Build temp directory")
+set(OUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin" CACHE STRING "Build output directory")
+
+message("build temp directory: ${OBJ_DIR}")
+message("build output directory: ${OUT_DIR}")
+
+include(${OBJ_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(NO_OUTPUT_DIRS)
+
 function(setup_target type)
   if(NOT CMAKE_COMPILER_IS_GNUCC)
     message(FATAL_ERROR "not GNU compilers are not supported yet by libadsc")
@@ -23,8 +33,6 @@ function(setup_target type)
 
   message("[${PROJECT_NAME}] libraries: ${LIBS}")
   message("[${PROJECT_NAME}] includes: ${INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}")
-
-  set(OUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../bin)
 
   set_target_properties(
     ${PROJECT_NAME} PROPERTIES
